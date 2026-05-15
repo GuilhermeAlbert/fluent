@@ -1,6 +1,16 @@
-# Fluent
+<p align="center">
+    <img src="public/favicon.png" alt="Fluent favicon" width="120" />
+</p>
 
-Learn words in context.
+<h1 align="center">
+  Fluent
+</h1>
+
+<p align="center">
+  Learn languages through real words, real context, and daily repetition.
+</p>
+
+## The project
 
 Fluent is a local-first vocabulary learning app built with React. It helps users study frequent words in English and other languages through Markdown-based word pages, daily practice, examples, pronunciation, notes, and progress saved in the browser.
 
@@ -18,85 +28,9 @@ The project is designed to feel calm, fast, and typography-focused, with referen
 - Minimal interface for focused study
 - Extensible folder structure for multiple languages
 
-## Screenshots
-
-Prototype images are stored in `images/prototypes`.
-
-| Home | Daily words |
-| --- | --- |
-| ![Fluent home prototype](../images/prototypes/home.png) | ![Fluent daily words prototype](../images/prototypes/daily-words.png) |
-
-| Explorer | Progress |
-| --- | --- |
-| ![Fluent explorer prototype](../images/prototypes/explorer.png) | ![Fluent progress prototype](../images/prototypes/progress.png) |
-
-| Difficult words | Settings |
-| --- | --- |
-| ![Fluent difficult words prototype](../images/prototypes/difficult-words.png) | ![Fluent settings prototype](../images/prototypes/settings.png) |
-
-## Getting Started
-
-### Requirements
-
-- Node.js 18 or newer
-- npm, pnpm, or yarn
-
-### Installation
-
-```bash
-git clone <repository-url>
-cd fluent
-npm install
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-Open the local Vite URL shown in your terminal.
-
-## Scripts
-
-Common project scripts:
-
-| Script | Description |
-| --- | --- |
-| `npm run dev` | Start the local development server. |
-| `npm run build` | Create a production build. |
-| `npm run preview` | Preview the production build locally. |
-| `npm run lint` | Run code quality checks. |
-
-## Folder Structure
-
-```text
-.
-├── app/
-├── words/
-│   └── english/
-│       ├── a/
-│       │   └── advice.md
-│       └── b/
-│           └── by.md
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   └── PULL_REQUEST_TEMPLATE.md
-├── README.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-├── CODE_OF_CONDUCT.md
-├── CHANGELOG.md
-├── LICENSE
-├── .env.example
-└── .gitignore
-```
-
-Prototype assets are kept in `images/prototypes`. Logo and favicon assets are kept in `images/logo` and `images/favicon`.
-
 ## Markdown Word Structure
 
-Word files live in `words/<language>/<letter>/<word>.md`.
+Word files live in `languages/<language>/words/<letter>/<word>.md`.
 
 Each file starts with front matter, followed by readable Markdown content:
 
