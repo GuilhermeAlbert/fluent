@@ -1,0 +1,26 @@
+---
+word: offense
+language: english
+pronunciation:
+difficulty:
+frequency_rank:
+tags: []
+studied: false
+favorite: false
+---
+
+# Offense
+
+## Meaning
+
+Offense is a lack of politeness.
+
+## Examples
+
+- The offense starts at nine.
+- We planned the offense together.
+- That offense changed everything.
+
+## Notes
+
+Commonly used as a noun. The exact article or plural form depends on the sentence.

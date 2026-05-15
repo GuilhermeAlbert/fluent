@@ -1,0 +1,26 @@
+---
+word: poor
+language: english
+pronunciation:
+difficulty:
+frequency_rank:
+tags: []
+studied: false
+favorite: false
+---
+
+# Poor
+
+## Meaning
+
+Poor means people without haveions or wealth.
+
+## Examples
+
+- The urban poor need assistance.
+- We talked about the poor.
+- The poor matters here.
+
+## Notes
+
+Commonly used as a noun. The exact article or plural form depends on the sentence.

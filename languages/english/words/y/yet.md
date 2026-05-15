@@ -1,0 +1,26 @@
+---
+word: yet
+language: english
+pronunciation:
+difficulty:
+frequency_rank:
+tags: []
+studied: false
+favorite: false
+---
+
+# Yet
+
+## Meaning
+
+Yet means doing something in a way that is up to the present time.
+
+## Examples
+
+- I have yet to see the results.
+- Details are yet to be worked out.
+- She answered yet.
+
+## Notes
+
+Usually used as an adverb to change the meaning of a verb, adjective, or whole sentence.
