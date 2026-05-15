@@ -92,6 +92,19 @@ Recommended content sections:
 - Improve offline behavior
 - Refine typography and reading experience
 
+## Deployment
+
+Fluent is deployed with GitHub Pages. The workflow in `.github/workflows/deploy.yml`
+runs on every push to `main`, installs dependencies with `npm ci`, builds the Vite app,
+uploads the `dist` folder, and deploys it with the official GitHub Pages actions.
+
+GitHub Pages must be configured in the repository settings to use **GitHub Actions** as
+the source. The Vite `base` value in `vite.config.ts` is set to `/fluent/` and must match
+the GitHub repository name.
+
+The app uses `HashRouter` for SPA-friendly GitHub Pages routes such as `#/`,
+`#/daily-words`, `#/explorer`, `#/difficult-words`, `#/progress`, and `#/settings`.
+
 ## Contributing
 
 Contributions are welcome. Fluent is especially suited for small, focused improvements:
