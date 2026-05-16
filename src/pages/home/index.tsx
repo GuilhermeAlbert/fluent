@@ -7,7 +7,14 @@ import { StudyActions } from "./components/study-actions";
 import { TodaySummary } from "./components/today-summary";
 
 export function HomePage() {
-  const { currentWord, dailyProgress, todaySummary } = useHomeData();
+  const {
+    completeCurrentWord,
+    currentWord,
+    dailyProgress,
+    skipCurrentWord,
+    speakCurrentWord,
+    todaySummary,
+  } = useHomeData();
 
   return (
     <AppShell
@@ -15,14 +22,14 @@ export function HomePage() {
       title="Today’s Word"
     >
       <div className="space-y-6">
-        <CurrentWordCard word={currentWord} />
+        <CurrentWordCard onPlayPronunciation={speakCurrentWord} word={currentWord} />
 
         <div className="grid gap-7 lg:grid-cols-2">
           <ExamplesCard examples={currentWord.examples} />
           <NotesCard note={currentWord.note} />
         </div>
 
-        <StudyActions />
+        <StudyActions onNext={completeCurrentWord} onSkip={skipCurrentWord} />
       </div>
     </AppShell>
   );

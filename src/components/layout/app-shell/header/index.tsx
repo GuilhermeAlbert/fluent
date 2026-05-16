@@ -1,12 +1,23 @@
+import { Menu } from "lucide-react";
 import { headerStyles } from "./styles";
 import type { HeaderProps } from "./types";
 
-export function Header({ children, description, title }: HeaderProps) {
+export function Header({ children, description, onMenuClick, title }: HeaderProps) {
   return (
     <header className={headerStyles.root}>
-      <div>
-        <h1 className={headerStyles.title}>{title}</h1>
-        {description ? <p className={headerStyles.description}>{description}</p> : null}
+      <div className={headerStyles.headingGroup}>
+        <button
+          aria-label="Open navigation menu"
+          className={headerStyles.menuButton}
+          onClick={onMenuClick}
+          type="button"
+        >
+          <Menu aria-hidden="true" className="h-5 w-5" />
+        </button>
+        <div>
+          <h1 className={headerStyles.title}>{title}</h1>
+          {description ? <p className={headerStyles.description}>{description}</p> : null}
+        </div>
       </div>
       {children}
     </header>

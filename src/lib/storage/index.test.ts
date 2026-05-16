@@ -7,6 +7,7 @@ describe("parseStorageData", () => {
       version: 1,
       dailyGoal: 7,
       completedToday: 3,
+      currentWordIndex: 2,
       streak: 5,
       wordProgress: {
         advice: {
@@ -22,6 +23,7 @@ describe("parseStorageData", () => {
       version: 1,
       dailyGoal: 7,
       completedToday: 3,
+      currentWordIndex: 2,
       streak: 5,
       wordProgress: {
         advice: {

@@ -12,5 +12,6 @@ export interface FluentStorageData {
   dailyGoal: number;
   completedToday: number;
   streak: number;
+  currentWordIndex: number;
   wordProgress: Record<string, StorageWordProgress>;
 }

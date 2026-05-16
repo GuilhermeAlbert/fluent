@@ -6,3 +6,8 @@ export interface SidebarNavItem {
   to: string;
   icon: ComponentType<LucideProps>;
 }
+
+export interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}

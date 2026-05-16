@@ -1,8 +1,15 @@
-import { useMemo } from "react";
-import { currentWordSeed } from "../lib/words";
+import { useCallback, useMemo, useState } from "react";
+import { defaultFluentStorageData, readFluentStorage, writeFluentStorage } from "../lib/storage";
+import {
+  completeCurrentWord,
+  createHomeSessionSnapshot,
+  resetHomeSession,
+  skipCurrentWord,
+  type HomeSessionSnapshot,
+} from "../lib/session";
+import { homeWordSeeds } from "../lib/words";
 import type { DailyProgress, QuickAction, RecentWord, TodaySummary } from "../types/progress";
 import type { VocabularyWord } from "../types/word";
-import { useLocalProgress } from "./use-local-progress";
 
 export interface HomeData {
   todaySummary: TodaySummary;
@@ -10,6 +17,10 @@ export interface HomeData {
   dailyProgress: DailyProgress;
   recentWords: RecentWord[];
   quickActions: QuickAction[];
+  completeCurrentWord: () => void;
+  resetSession: () => void;
+  skipCurrentWord: () => void;
+  speakCurrentWord: () => void;
 }
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -66,29 +77,123 @@ const quickActions: QuickAction[] = [
   },
 ];
 
+function getInitialSession(): HomeSessionSnapshot {
+  const stored = readFluentStorage() ?? defaultFluentStorageData;
+
+  return createHomeSessionSnapshot({
+    completedToday: Math.min(stored.completedToday, stored.dailyGoal),
+    currentWordIndex: stored.currentWordIndex % homeWordSeeds.length,
+    dailyGoal: Math.min(stored.dailyGoal, homeWordSeeds.length),
+    streak: stored.streak,
+    wordProgress: stored.wordProgress,
+  });
+}
+
+function getRecentWordsFromSession(session: HomeSessionSnapshot): RecentWord[] {
+  const wordMap = new Map(homeWordSeeds.map((word) => [word.id, word]));
+
+  return Object.values(session.wordProgress)
+    .filter((progress) => wordMap.has(progress.wordId))
+    .sort((a, b) => b.lastStudiedAt.localeCompare(a.lastStudiedAt))
+    .slice(0, 4)
+    .map((progress) => ({
+      id: progress.wordId,
+      word: wordMap.get(progress.wordId)?.word ?? progress.wordId,
+      status: progress.status,
+      lastStudiedLabel: progress.completedToday ? "Today" : "Skipped today",
+    }));
+}
+
 export function useHomeData(): HomeData {
-  const progress = useLocalProgress();
+  const [session, setSession] = useState(getInitialSession);
+
+  const currentWordIndex = session.currentWordIndex % homeWordSeeds.length;
+  const wordSeed = homeWordSeeds[currentWordIndex];
+  const storedWordProgress = session.wordProgress[wordSeed.id];
+
+  const currentWord: VocabularyWord = useMemo(
+    () => ({
+      ...wordSeed,
+      status: storedWordProgress?.status ?? wordSeed.status,
+    }),
+    [storedWordProgress?.status, wordSeed],
+  );
+
+  const persistSession = useCallback((nextSession: HomeSessionSnapshot) => {
+    writeFluentStorage({
+      version: 1,
+      completedToday: nextSession.completedToday,
+      currentWordIndex: nextSession.currentWordIndex,
+      dailyGoal: nextSession.dailyGoal,
+      streak: nextSession.streak,
+      wordProgress: nextSession.wordProgress,
+    });
+  }, []);
+
+  const updateSession = useCallback(
+    (createNextSession: (session: HomeSessionSnapshot) => HomeSessionSnapshot) => {
+      setSession((currentSession) => {
+        const nextSession = createNextSession(currentSession);
+        persistSession(nextSession);
+        return nextSession;
+      });
+    },
+    [persistSession],
+  );
+
+  const completeWord = useCallback(() => {
+    updateSession((currentSession) =>
+      completeCurrentWord(currentSession, homeWordSeeds[currentSession.currentWordIndex].id, new Date().toISOString()),
+    );
+  }, [updateSession]);
+
+  const skipWord = useCallback(() => {
+    updateSession((currentSession) =>
+      skipCurrentWord(currentSession, homeWordSeeds[currentSession.currentWordIndex].id, new Date().toISOString()),
+    );
+  }, [updateSession]);
+
+  const resetSession = useCallback(() => {
+    updateSession(resetHomeSession);
+  }, [updateSession]);
+
+  const speakCurrentWord = useCallback(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(currentWord.word);
+    utterance.lang = "en-US";
+    window.speechSynthesis.speak(utterance);
+  }, [currentWord.word]);
 
   return useMemo(() => {
     const todaySummary: TodaySummary = {
       dateLabel: dateFormatter.format(new Date()),
       focusLabel: "Today's focus",
-      dailyGoal: progress.dailyGoal,
-      wordsPlannedToday: progress.wordsPlannedToday,
-      completedToday: progress.completedToday,
+      dailyGoal: session.dailyGoal,
+      wordsPlannedToday: session.dailyGoal,
+      completedToday: session.completedToday,
     };
 
     return {
       todaySummary,
-      currentWord: currentWordSeed,
+      currentWord,
       dailyProgress: {
-        completed: progress.completedToday,
-        planned: progress.wordsPlannedToday,
-        remaining: Math.max(progress.wordsPlannedToday - progress.completedToday, 0),
-        streak: progress.streak,
+        completed: session.completedToday,
+        planned: session.dailyGoal,
+        remaining: Math.max(session.dailyGoal - session.completedToday, 0),
+        streak: session.streak,
       },
-      recentWords,
+      recentWords: getRecentWordsFromSession(session).length
+        ? getRecentWordsFromSession(session)
+        : recentWords,
       quickActions,
+      completeCurrentWord: completeWord,
+      resetSession,
+      skipCurrentWord: skipWord,
+      speakCurrentWord,
     };
-  }, [progress]);
+  }, [completeWord, currentWord, resetSession, session, skipWord, speakCurrentWord]);
 }

@@ -1,4 +1,4 @@
 export interface StudyActionsProps {
-  onSkip?: () => void;
-  onNext?: () => void;
+  onNext: () => void;
+  onSkip: () => void;
 }

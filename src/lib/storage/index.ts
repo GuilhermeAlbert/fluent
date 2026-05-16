@@ -2,6 +2,15 @@ import type { FluentStorageData, StorageWordProgress } from "./types";
 
 export const FLUENT_STORAGE_KEY = "fluent.storage.v1";
 
+export const defaultFluentStorageData: FluentStorageData = {
+  version: 1,
+  dailyGoal: 10,
+  completedToday: 3,
+  streak: 12,
+  currentWordIndex: 0,
+  wordProgress: {},
+};
+
 const validStatuses = new Set(["new", "learning", "completed", "difficult"]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -71,6 +80,8 @@ export function parseStorageData(payload: string | null): FluentStorageData | nu
       dailyGoal: parsed.dailyGoal,
       completedToday: parsed.completedToday,
       streak: parsed.streak,
+      currentWordIndex:
+        typeof parsed.currentWordIndex === "number" ? parsed.currentWordIndex : 0,
       wordProgress,
     };
   } catch {
@@ -84,4 +95,12 @@ export function readFluentStorage(): FluentStorageData | null {
   }
 
   return parseStorageData(window.localStorage.getItem(FLUENT_STORAGE_KEY));
+}
+
+export function writeFluentStorage(data: FluentStorageData) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(FLUENT_STORAGE_KEY, JSON.stringify(data));
 }

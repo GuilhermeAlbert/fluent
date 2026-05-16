@@ -17,7 +17,7 @@ const difficultyLabels = {
   hard: "Hard",
 };
 
-export function CurrentWordCard({ word }: CurrentWordCardProps) {
+export function CurrentWordCard({ onPlayPronunciation, word }: CurrentWordCardProps) {
   return (
     <Card className="min-h-[488px] shadow-sm" padding="lg">
       <div className="flex h-full flex-col items-center justify-center py-6 text-center">
@@ -32,6 +32,7 @@ export function CurrentWordCard({ word }: CurrentWordCardProps) {
           <button
             aria-label={`Play pronunciation for ${word.word}`}
             className="flex h-[66px] w-[66px] shrink-0 items-center justify-center rounded-2xl border border-fluent-border bg-white text-[#070B1A] transition hover:border-[#D1D5DB] hover:bg-[#F9FAFB]"
+            onClick={onPlayPronunciation}
             type="button"
           >
             <Volume2 aria-hidden="true" className="h-7 w-7" />

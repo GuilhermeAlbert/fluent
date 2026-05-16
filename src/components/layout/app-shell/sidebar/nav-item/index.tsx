@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { cn } from "../../../../../lib/styles";
 import type { NavItemProps } from "./types";
 
-export function NavItem({ item }: NavItemProps) {
+export function NavItem({ item, onNavigate }: NavItemProps) {
   const Icon = item.icon;
 
   return (
@@ -15,6 +15,7 @@ export function NavItem({ item }: NavItemProps) {
             : "text-[#111827] hover:bg-white hover:text-fluent-accent",
         )
       }
+      onClick={onNavigate}
       to={item.to}
     >
       <Icon aria-hidden="true" className="h-6 w-6 shrink-0" strokeWidth={2} />
