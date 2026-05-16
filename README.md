@@ -16,6 +16,8 @@ Fluent is a local-first vocabulary learning app built with React. It helps users
 
 The project is designed to feel calm, fast, and typography-focused, with references from Notion, Linear, Buffer, Granola, and Raycast.
 
+Read the project manifesto in [`content/manifesto.md`](content/manifesto.md).
+
 ## Features
 
 - Markdown-based word files
