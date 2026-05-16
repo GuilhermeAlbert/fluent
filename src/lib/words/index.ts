@@ -523,18 +523,43 @@ const homeWordsByLanguage: Record<LearningLanguage, HomeWordSeed[]> = {
   spanish: spanishHomeWordSeeds,
 };
 
+function hashText(value: string) {
+  let hash = 2166136261;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return hash >>> 0;
+}
+
+function createLearningOrder(words: HomeWordSeed[], language: LearningLanguage) {
+  return [...words].sort((a, b) => {
+    const aHash = hashText(`${language}:${a.id}`);
+    const bHash = hashText(`${language}:${b.id}`);
+
+    if (aHash !== bHash) {
+      return aHash - bHash;
+    }
+
+    return a.word.localeCompare(b.word);
+  });
+}
+
 export function getHomeWords(
   language: LearningLanguage,
   includeDifficultWords: boolean,
 ): HomeWordSeed[] {
   const markdownWords = createVocabularyWordsFromMarkdownModules(markdownWordModules, language);
   const words = markdownWords.length ? markdownWords : (homeWordsByLanguage[language] ?? homeWordSeeds);
+  const learningWords = createLearningOrder(words, language);
 
   if (includeDifficultWords) {
-    return words;
+    return learningWords;
   }
 
-  return words.filter((word) => word.status !== "difficult" && word.difficulty !== "hard");
+  return learningWords.filter((word) => word.status !== "difficult" && word.difficulty !== "hard");
 }
 
 export const currentWordSeed = homeWordSeeds[0];

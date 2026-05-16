@@ -40,18 +40,25 @@ function createProgress(
   };
 }
 
-function countCompletedToday(wordProgress: HomeSessionSnapshot["wordProgress"]) {
-  return Object.values(wordProgress).filter((progress) => progress.completedToday).length;
+function countCompletedToday(
+  wordProgress: HomeSessionSnapshot["wordProgress"],
+) {
+  return Object.values(wordProgress).filter(
+    (progress) => progress.completedToday,
+  ).length;
 }
 
 export function countCompletedDailyWords(
   session: HomeSessionSnapshot,
   words: VocabularyWord[],
 ): number {
-  const plannedWordIds = new Set(words.slice(0, session.dailyGoal).map((word) => word.id));
+  const plannedWordIds = new Set(
+    words.slice(0, session.dailyGoal).map((word) => word.id),
+  );
 
   return Object.values(session.wordProgress).filter(
-    (progress) => plannedWordIds.has(progress.wordId) && progress.completedToday,
+    (progress) =>
+      plannedWordIds.has(progress.wordId) && progress.completedToday,
   ).length;
 }
 
@@ -99,9 +106,17 @@ export function setDailyWordCompleted(
 ): HomeSessionSnapshot {
   const wordProgress = {
     ...state.wordProgress,
-    [wordId]: createProgress(wordId, completed ? "completed" : "learning", storedAt, completed),
+    [wordId]: createProgress(
+      wordId,
+      completed ? "completed" : "learning",
+      storedAt,
+      completed,
+    ),
   };
-  const completedToday = Math.min(countCompletedToday(wordProgress), state.dailyGoal);
+  const completedToday = Math.min(
+    countCompletedToday(wordProgress),
+    state.dailyGoal,
+  );
 
   return {
     ...state,
@@ -117,7 +132,10 @@ export function setCurrentDailyWord(
 ): HomeSessionSnapshot {
   return {
     ...state,
-    currentWordIndex: Math.max(0, Math.min(currentWordIndex, state.dailyGoal - 1)),
+    currentWordIndex: Math.max(
+      0,
+      Math.min(currentWordIndex, state.dailyGoal - 1),
+    ),
   };
 }
 

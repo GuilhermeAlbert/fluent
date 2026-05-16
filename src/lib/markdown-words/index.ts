@@ -18,6 +18,32 @@ interface MarkdownFrontmatter {
 }
 
 const validDifficulties = new Set<WordDifficulty>(["easy", "medium", "hard"]);
+const englishReadablePronunciations: Record<string, string> = {
+  advice: "ədˈvīs",
+  advise: "ədˈvīz",
+  affect: "əˈfekt",
+  complaint: "kəmˈplānt",
+  conclude: "kənˈklo͞od",
+  concern: "kənˈsərn",
+  demonstrate: "ˈdemənˌstrāt",
+  effect: "əˈfekt",
+  effective: "əˈfektiv",
+  effectively: "əˈfektivlē",
+  freedom: "ˈfrēdəm",
+  implication: "ˌimpləˈkāshən",
+  junior: "ˈjo͞onyər",
+  library: "ˈlīˌbrerē",
+  mary: "ˈmerē",
+  open: "ˈōpən",
+  operate: "ˈäpəˌrāt",
+  outcome: "ˈoutˌkəm",
+  primary: "ˈprīˌmerē",
+  reason: "ˈrēzən",
+  reasonable: "ˈrēzənəbəl",
+  slowly: "ˈslōlē",
+  table: "ˈtābəl",
+  threaten: "ˈthretən",
+};
 
 function titleCase(value: string) {
   return value
@@ -156,6 +182,124 @@ function parseDifficulty(value: string | undefined, frequencyRank: string | unde
   return "medium";
 }
 
+function transcribeEnglishConsonants(value: string) {
+  return value
+    .replace(/qu/g, "kw")
+    .replace(/ph/g, "f")
+    .replace(/ck/g, "k")
+    .replace(/wh/g, "w")
+    .replace(/c(?=[eiy])/g, "s")
+    .replace(/c/g, "k")
+    .replace(/g(?=[eiy])/g, "j")
+    .replace(/x/g, "ks");
+}
+
+function transcribeEnglishVowels(value: string) {
+  return value
+    .replace(/eigh/g, "ā")
+    .replace(/igh/g, "ī")
+    .replace(/eau/g, "ō")
+    .replace(/ee/g, "ē")
+    .replace(/ea/g, "ē")
+    .replace(/ie/g, "ē")
+    .replace(/ei/g, "ē")
+    .replace(/oo/g, "o͞o")
+    .replace(/ue/g, "o͞o")
+    .replace(/oa/g, "ō")
+    .replace(/ai/g, "ā")
+    .replace(/ay/g, "ā")
+    .replace(/ow/g, "ou")
+    .replace(/ou/g, "ou")
+    .replace(/a(?=[^aeiouy]*e$)/g, "ā")
+    .replace(/i(?=[^aeiouy]*e$)/g, "ī")
+    .replace(/o(?=[^aeiouy]*e$)/g, "ō")
+    .replace(/u(?=[^aeiouy]*e$)/g, "o͞o")
+    .replace(/e$/g, "")
+    .replace(/y$/g, "ē")
+    .replace(/a/g, "ă")
+    .replace(/e/g, "e")
+    .replace(/i/g, "i")
+    .replace(/o/g, "ä")
+    .replace(/u/g, "ə");
+}
+
+function transcribeEnglishStem(value: string): string {
+  return transcribeEnglishConsonants(transcribeEnglishVowels(value));
+}
+
+const englishSuffixPronunciations: Array<[suffix: string, pronunciation: string]> = [
+  ["ization", "əˈzāshən"],
+  ["ational", "āshənəl"],
+  ["fulness", "fəlnəs"],
+  ["lessly", "ləslē"],
+  ["tion", "shən"],
+  ["sion", "zhən"],
+  ["cial", "shəl"],
+  ["tial", "shəl"],
+  ["ture", "chər"],
+  ["sure", "zhər"],
+  ["ment", "mənt"],
+  ["ness", "nəs"],
+  ["less", "ləs"],
+  ["able", "əbəl"],
+  ["ible", "əbəl"],
+  ["ally", "əlē"],
+  ["ary", "erē"],
+  ["ory", "ərē"],
+  ["ery", "ərē"],
+  ["dom", "dəm"],
+  ["ful", "fəl"],
+  ["ous", "əs"],
+  ["ive", "iv"],
+  ["ize", "īz"],
+  ["ate", "āt"],
+  ["ing", "iŋ"],
+  ["ly", "lē"],
+  ["er", "ər"],
+  ["or", "ər"],
+  ["al", "əl"],
+  ["ed", "d"],
+];
+
+function transcribeEnglishPart(value: string): string {
+  const lowerValue = value.toLocaleLowerCase();
+
+  for (const [suffix, pronunciation] of englishSuffixPronunciations) {
+    if (lowerValue.endsWith(suffix) && lowerValue.length > suffix.length + 1) {
+      return `${transcribeEnglishStem(lowerValue.slice(0, -suffix.length))}${pronunciation}`;
+    }
+  }
+
+  return transcribeEnglishStem(lowerValue);
+}
+
+function ensurePrimaryStress(value: string) {
+  return /[ˈˌ]/.test(value) ? value : `ˈ${value}`;
+}
+
+function createDictionaryPronunciationGuide(word: string) {
+  return word
+    .toLocaleLowerCase()
+    .split(/[^a-z]+/i)
+    .filter(Boolean)
+    .map((part) => englishReadablePronunciations[normalizeIdPart(part)] ?? ensurePrimaryStress(transcribeEnglishPart(part)))
+    .join(" ");
+}
+
+function createPronunciationFallback(word: string, language: LearningLanguage) {
+  const key = normalizeIdPart(word);
+
+  if (language === "english" && englishReadablePronunciations[key]) {
+    return englishReadablePronunciations[key];
+  }
+
+  if (language === "english") {
+    return createDictionaryPronunciationGuide(word);
+  }
+
+  return word.toLocaleLowerCase();
+}
+
 export function parseMarkdownVocabularyWord({
   content,
   path,
@@ -179,7 +323,7 @@ export function parseMarkdownVocabularyWord({
     word,
     language,
     partOfSpeech: "Word",
-    pronunciation: frontmatter.pronunciation || "",
+    pronunciation: frontmatter.pronunciation || createPronunciationFallback(word, language),
     meaning,
     examples,
     note: {

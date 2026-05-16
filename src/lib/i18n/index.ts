@@ -18,6 +18,7 @@ export interface InterfaceCopy {
     openMenu: string;
     closeMenu: string;
     dayStreak: string;
+    githubRepository: string;
   };
   home: {
     title: string;
@@ -175,6 +176,7 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       openMenu: "Open navigation menu",
       closeMenu: "Close navigation menu",
       dayStreak: "day streak",
+      githubRepository: "Open Fluent on GitHub",
     },
     home: {
       title: "Today’s Word",
@@ -331,6 +333,7 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       openMenu: "Abrir menu de navegação",
       closeMenu: "Fechar menu de navegação",
       dayStreak: "dias de sequência",
+      githubRepository: "Abrir o Fluent no GitHub",
     },
     home: {
       title: "Palavra de Hoje",
@@ -487,6 +490,7 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       openMenu: "Abrir menú de navegación",
       closeMenu: "Cerrar menú de navegación",
       dayStreak: "días de racha",
+      githubRepository: "Abrir Fluent en GitHub",
     },
     home: {
       title: "Palabra de Hoy",
