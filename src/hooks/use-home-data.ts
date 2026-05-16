@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { defaultFluentStorageData, readFluentStorage, writeFluentStorage } from "../lib/storage";
+import { defaultSettingsPreferences } from "../lib/settings";
+import { getInterfaceCopy, type InterfaceCopy } from "../lib/i18n";
 import {
   completeCurrentWord,
   createHomeSessionSnapshot,
@@ -7,9 +9,10 @@ import {
   skipCurrentWord,
   type HomeSessionSnapshot,
 } from "../lib/session";
-import { homeWordSeeds } from "../lib/words";
+import { getHomeWords } from "../lib/words";
 import type { DailyProgress, QuickAction, RecentWord, TodaySummary } from "../types/progress";
 import type { VocabularyWord } from "../types/word";
+import type { SettingsPreferences } from "../types/settings";
 
 export interface HomeData {
   todaySummary: TodaySummary;
@@ -17,6 +20,7 @@ export interface HomeData {
   dailyProgress: DailyProgress;
   recentWords: RecentWord[];
   quickActions: QuickAction[];
+  copy: InterfaceCopy;
   completeCurrentWord: () => void;
   resetSession: () => void;
   skipCurrentWord: () => void;
@@ -77,20 +81,27 @@ const quickActions: QuickAction[] = [
   },
 ];
 
+function getInitialPreferences(): SettingsPreferences {
+  return readFluentStorage()?.settings ?? defaultSettingsPreferences;
+}
+
 function getInitialSession(): HomeSessionSnapshot {
   const stored = readFluentStorage() ?? defaultFluentStorageData;
 
   return createHomeSessionSnapshot({
     completedToday: Math.min(stored.completedToday, stored.dailyGoal),
-    currentWordIndex: stored.currentWordIndex % homeWordSeeds.length,
-    dailyGoal: Math.min(stored.dailyGoal, homeWordSeeds.length),
+    currentWordIndex: stored.currentWordIndex,
+    dailyGoal: stored.dailyGoal,
     streak: stored.streak,
     wordProgress: stored.wordProgress,
   });
 }
 
-function getRecentWordsFromSession(session: HomeSessionSnapshot): RecentWord[] {
-  const wordMap = new Map(homeWordSeeds.map((word) => [word.id, word]));
+function getRecentWordsFromSession(
+  session: HomeSessionSnapshot,
+  words: VocabularyWord[],
+): RecentWord[] {
+  const wordMap = new Map(words.map((word) => [word.id, word]));
 
   return Object.values(session.wordProgress)
     .filter((progress) => wordMap.has(progress.wordId))
@@ -105,10 +116,16 @@ function getRecentWordsFromSession(session: HomeSessionSnapshot): RecentWord[] {
 }
 
 export function useHomeData(): HomeData {
+  const [preferences] = useState(getInitialPreferences);
   const [session, setSession] = useState(getInitialSession);
+  const copy = getInterfaceCopy(preferences.interfaceLanguage);
+  const words = useMemo(
+    () => getHomeWords(preferences.learningLanguage, preferences.includeDifficultWords),
+    [preferences.includeDifficultWords, preferences.learningLanguage],
+  );
 
-  const currentWordIndex = session.currentWordIndex % homeWordSeeds.length;
-  const wordSeed = homeWordSeeds[currentWordIndex];
+  const currentWordIndex = session.currentWordIndex % words.length;
+  const wordSeed = words[currentWordIndex];
   const storedWordProgress = session.wordProgress[wordSeed.id];
 
   const currentWord: VocabularyWord = useMemo(
@@ -120,11 +137,23 @@ export function useHomeData(): HomeData {
   );
 
   const persistSession = useCallback((nextSession: HomeSessionSnapshot) => {
+    const settings = readFluentStorage()?.settings ?? defaultSettingsPreferences;
+
     writeFluentStorage({
       version: 1,
       completedToday: nextSession.completedToday,
       currentWordIndex: nextSession.currentWordIndex,
       dailyGoal: nextSession.dailyGoal,
+      settings: {
+        ...settings,
+        dailyGoal:
+          nextSession.dailyGoal === 5 ||
+          nextSession.dailyGoal === 10 ||
+          nextSession.dailyGoal === 15 ||
+          nextSession.dailyGoal === 20
+            ? nextSession.dailyGoal
+            : settings.dailyGoal,
+      },
       streak: nextSession.streak,
       wordProgress: nextSession.wordProgress,
     });
@@ -143,15 +172,23 @@ export function useHomeData(): HomeData {
 
   const completeWord = useCallback(() => {
     updateSession((currentSession) =>
-      completeCurrentWord(currentSession, homeWordSeeds[currentSession.currentWordIndex].id, new Date().toISOString()),
+      completeCurrentWord(
+        currentSession,
+        words[currentSession.currentWordIndex % words.length].id,
+        new Date().toISOString(),
+      ),
     );
-  }, [updateSession]);
+  }, [updateSession, words]);
 
   const skipWord = useCallback(() => {
     updateSession((currentSession) =>
-      skipCurrentWord(currentSession, homeWordSeeds[currentSession.currentWordIndex].id, new Date().toISOString()),
+      skipCurrentWord(
+        currentSession,
+        words[currentSession.currentWordIndex % words.length].id,
+        new Date().toISOString(),
+      ),
     );
-  }, [updateSession]);
+  }, [updateSession, words]);
 
   const resetSession = useCallback(() => {
     updateSession(resetHomeSession);
@@ -164,9 +201,9 @@ export function useHomeData(): HomeData {
 
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(currentWord.word);
-    utterance.lang = "en-US";
+    utterance.lang = preferences.learningLanguage === "spanish" ? "es-ES" : "en-US";
     window.speechSynthesis.speak(utterance);
-  }, [currentWord.word]);
+  }, [currentWord.word, preferences.learningLanguage]);
 
   return useMemo(() => {
     const todaySummary: TodaySummary = {
@@ -180,14 +217,15 @@ export function useHomeData(): HomeData {
     return {
       todaySummary,
       currentWord,
+      copy,
       dailyProgress: {
         completed: session.completedToday,
         planned: session.dailyGoal,
         remaining: Math.max(session.dailyGoal - session.completedToday, 0),
         streak: session.streak,
       },
-      recentWords: getRecentWordsFromSession(session).length
-        ? getRecentWordsFromSession(session)
+      recentWords: getRecentWordsFromSession(session, words).length
+        ? getRecentWordsFromSession(session, words)
         : recentWords,
       quickActions,
       completeCurrentWord: completeWord,
@@ -195,5 +233,5 @@ export function useHomeData(): HomeData {
       skipCurrentWord: skipWord,
       speakCurrentWord,
     };
-  }, [completeWord, currentWord, resetSession, session, skipWord, speakCurrentWord]);
+  }, [completeWord, copy, currentWord, resetSession, session, skipWord, speakCurrentWord, words]);
 }

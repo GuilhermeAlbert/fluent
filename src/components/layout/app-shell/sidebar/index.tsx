@@ -12,20 +12,20 @@ import { cn } from "../../../../lib/styles";
 import { NavItem } from "./nav-item";
 import type { SidebarNavItem, SidebarProps } from "./types";
 
-const navItems: SidebarNavItem[] = [
-  { label: "Home", to: "/", icon: Home },
-  { label: "Daily Words", to: "/daily-words", icon: CalendarDays },
-  { label: "Explorer", to: "/explorer", icon: Search },
-  { label: "Difficult Words", to: "/difficult-words", icon: Flag },
-  { label: "Progress", to: "/progress", icon: BarChart3 },
-  { label: "Settings", to: "/settings", icon: Settings },
-];
+export function Sidebar({ copy, isOpen, onClose }: SidebarProps) {
+  const navItems: SidebarNavItem[] = [
+    { label: copy.navigation.home, to: "/", icon: Home },
+    { label: copy.navigation.dailyWords, to: "/daily-words", icon: CalendarDays },
+    { label: copy.navigation.explorer, to: "/explorer", icon: Search },
+    { label: copy.navigation.difficultWords, to: "/difficult-words", icon: Flag },
+    { label: copy.navigation.progress, to: "/progress", icon: BarChart3 },
+    { label: copy.navigation.settings, to: "/settings", icon: Settings },
+  ];
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       <button
-        aria-label="Close navigation menu"
+        aria-label={copy.navigation.closeMenu}
         className={cn(
           "fixed inset-0 z-40 bg-[#111111]/20 opacity-0 transition-opacity md:hidden",
           isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none",
@@ -45,7 +45,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             aria-hidden="true"
             className="relative h-10 w-9 shrink-0 text-fluent-accent"
           >
-            <img src="./public/favicon.png" alt="Fluent logo" />
+            <img alt="Fluent logo" src={`${import.meta.env.BASE_URL}favicon.png`} />
           </div>
 
           <span className="text-[32px] font-semibold leading-none tracking-normal text-[#070B1A]">
@@ -53,7 +53,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </span>
 
           <button
-            aria-label="Close navigation menu"
+            aria-label={copy.navigation.closeMenu}
             className="ml-auto flex h-10 w-10 items-center justify-center rounded-xl border border-fluent-border bg-white text-[#070B1A] shadow-sm md:hidden"
             onClick={onClose}
             type="button"
@@ -84,7 +84,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 12
               </p>
               <p className="mt-1 text-sm leading-none text-fluent-muted">
-                day streak
+                {copy.navigation.dayStreak}
               </p>
             </div>
           </div>

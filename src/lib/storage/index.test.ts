@@ -5,10 +5,16 @@ describe("parseStorageData", () => {
   it("returns stored progress when the payload is valid", () => {
     const payload = JSON.stringify({
       version: 1,
-      dailyGoal: 7,
+      dailyGoal: 10,
       completedToday: 3,
       currentWordIndex: 2,
       streak: 5,
+      settings: {
+        dailyGoal: 10,
+        includeDifficultWords: true,
+        learningLanguage: "english",
+        interfaceLanguage: "english",
+      },
       wordProgress: {
         advice: {
           wordId: "advice",
@@ -21,10 +27,16 @@ describe("parseStorageData", () => {
 
     expect(parseStorageData(payload)).toEqual({
       version: 1,
-      dailyGoal: 7,
+      dailyGoal: 10,
       completedToday: 3,
       currentWordIndex: 2,
       streak: 5,
+      settings: {
+        dailyGoal: 10,
+        includeDifficultWords: true,
+        learningLanguage: "english",
+        interfaceLanguage: "english",
+      },
       wordProgress: {
         advice: {
           wordId: "advice",

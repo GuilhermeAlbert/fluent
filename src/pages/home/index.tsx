@@ -9,6 +9,7 @@ import { TodaySummary } from "./components/today-summary";
 export function HomePage() {
   const {
     completeCurrentWord,
+    copy,
     currentWord,
     dailyProgress,
     skipCurrentWord,
@@ -18,18 +19,23 @@ export function HomePage() {
 
   return (
     <AppShell
-      headerAside={<TodaySummary progress={dailyProgress} summary={todaySummary} />}
-      title="Today’s Word"
+      copy={copy}
+      headerAside={<TodaySummary copy={copy} progress={dailyProgress} summary={todaySummary} />}
+      title={copy.home.title}
     >
       <div className="space-y-6">
-        <CurrentWordCard onPlayPronunciation={speakCurrentWord} word={currentWord} />
+        <CurrentWordCard
+          copy={copy}
+          onPlayPronunciation={speakCurrentWord}
+          word={currentWord}
+        />
 
         <div className="grid gap-7 lg:grid-cols-2">
-          <ExamplesCard examples={currentWord.examples} />
-          <NotesCard note={currentWord.note} />
+          <ExamplesCard copy={copy} examples={currentWord.examples} />
+          <NotesCard copy={copy} note={currentWord.note} />
         </div>
 
-        <StudyActions onNext={completeCurrentWord} onSkip={skipCurrentWord} />
+        <StudyActions copy={copy} onNext={completeCurrentWord} onSkip={skipCurrentWord} />
       </div>
     </AppShell>
   );

@@ -1,4 +1,5 @@
 import type { HomeWordSeed } from "./types";
+import type { LearningLanguage } from "../../types/settings";
 
 export const homeWordSeeds: HomeWordSeed[] = [
   {
@@ -212,5 +213,131 @@ export const homeWordSeeds: HomeWordSeed[] = [
     status: "new",
   },
 ];
+
+const spanishHomeWordSeeds: HomeWordSeed[] = [
+  {
+    id: "spanish-consejo",
+    word: "Consejo",
+    partOfSpeech: "Sustantivo",
+    pronunciation: "/konˈsexo/",
+    meaning: "Una recomendación o sugerencia sobre lo que alguien debería hacer.",
+    examples: [
+      { id: "spanish-consejo-example-1", text: "Ella me dio un buen consejo." },
+      { id: "spanish-consejo-example-2", text: "Necesito tu consejo." },
+      { id: "spanish-consejo-example-3", text: "Déjame darte un consejo." },
+    ],
+    note: {
+      summary: "“Consejo” es contable en español.",
+      avoid: "un consejo bueno me dio",
+      use: "me dio un buen consejo",
+    },
+    difficulty: "easy",
+    frequencyLabel: "Top 500",
+    tags: ["comunicación", "vida-diaria"],
+    status: "new",
+  },
+  {
+    id: "spanish-por",
+    word: "Por",
+    partOfSpeech: "Preposición",
+    pronunciation: "/poɾ/",
+    meaning: "Se usa para expresar causa, medio, duración o intercambio.",
+    examples: [
+      { id: "spanish-por-example-1", text: "Gracias por tu ayuda." },
+      { id: "spanish-por-example-2", text: "Viajamos por tren." },
+      { id: "spanish-por-example-3", text: "Estudié por dos horas." },
+    ],
+    note: {
+      summary: "“Por” suele indicar causa o medio; no siempre equivale a “para”.",
+      avoid: "gracias para tu ayuda",
+      use: "gracias por tu ayuda",
+    },
+    difficulty: "medium",
+    frequencyLabel: "Top 100",
+    tags: ["gramática", "uso"],
+    status: "new",
+  },
+  {
+    id: "spanish-otra-vez",
+    word: "Otra vez",
+    partOfSpeech: "Adverbio",
+    pronunciation: "/ˈotɾa βes/",
+    meaning: "Indica repetición: una vez más.",
+    examples: [
+      { id: "spanish-otra-vez-example-1", text: "¿Puedes repetirlo otra vez?" },
+      { id: "spanish-otra-vez-example-2", text: "Lo intentaré otra vez mañana." },
+      { id: "spanish-otra-vez-example-3", text: "La habitación quedó tranquila otra vez." },
+    ],
+    note: {
+      summary: "“Otra vez” es más natural que traducir literalmente “again” en muchas frases.",
+      avoid: "de nuevo vez",
+      use: "otra vez",
+    },
+    difficulty: "easy",
+    frequencyLabel: "Top 300",
+    tags: ["repetición", "vida-diaria"],
+    status: "new",
+  },
+  {
+    id: "spanish-contexto",
+    word: "Contexto",
+    partOfSpeech: "Sustantivo",
+    pronunciation: "/konˈteksto/",
+    meaning: "La información o situación que ayuda a entender algo.",
+    examples: [
+      { id: "spanish-contexto-example-1", text: "La frase necesita más contexto." },
+      { id: "spanish-contexto-example-2", text: "En este contexto, la palabra es informal." },
+      { id: "spanish-contexto-example-3", text: "El contexto cambia el significado." },
+    ],
+    note: {
+      summary: "“Contexto” suele usarse con “de” o “en”.",
+      avoid: "contexto para esta frase",
+      use: "contexto de esta frase",
+    },
+    difficulty: "medium",
+    frequencyLabel: "Top 1000",
+    tags: ["lectura", "significado"],
+    status: "new",
+  },
+  {
+    id: "spanish-practica",
+    word: "Práctica",
+    partOfSpeech: "Sustantivo",
+    pronunciation: "/ˈpɾaktika/",
+    meaning: "Actividad repetida para mejorar una habilidad.",
+    examples: [
+      { id: "spanish-practica-example-1", text: "La práctica diaria ayuda mucho." },
+      { id: "spanish-practica-example-2", text: "Necesita más práctica oral." },
+      { id: "spanish-practica-example-3", text: "La práctica mejora la pronunciación." },
+    ],
+    note: {
+      summary: "“Práctica” lleva tilde cuando es sustantivo.",
+      avoid: "practica diaria",
+      use: "práctica diaria",
+    },
+    difficulty: "easy",
+    frequencyLabel: "Top 700",
+    tags: ["aprendizaje", "rutina"],
+    status: "new",
+  },
+];
+
+const homeWordsByLanguage: Record<LearningLanguage, HomeWordSeed[]> = {
+  english: homeWordSeeds,
+  spanish: spanishHomeWordSeeds,
+};
+
+export function getHomeWords(
+  language: LearningLanguage,
+  includeDifficultWords: boolean,
+): HomeWordSeed[] {
+  const words = homeWordsByLanguage[language] ?? homeWordSeeds;
+
+  if (includeDifficultWords) {
+    return words;
+  }
+
+  return words.filter((word) => word.status !== "difficult" && word.difficulty !== "hard");
+}
 
 export const currentWordSeed = homeWordSeeds[0];

@@ -4,15 +4,16 @@ import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 import type { AppShellProps } from "./types";
 
-export function AppShell({ children, description, headerAside, title }: AppShellProps) {
+export function AppShell({ children, copy, description, headerAside, title }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className={appShellStyles.root}>
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <Sidebar copy={copy} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <div className={appShellStyles.content}>
         <main className={appShellStyles.main}>
           <Header
+            copy={copy}
             description={description}
             onMenuClick={() => setIsSidebarOpen(true)}
             title={title}

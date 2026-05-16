@@ -1,4 +1,11 @@
 import type { FluentStorageData, StorageWordProgress } from "./types";
+import { defaultSettingsPreferences } from "../settings";
+import type {
+  DailyGoal,
+  InterfaceLanguage,
+  LearningLanguage,
+  SettingsPreferences,
+} from "../../types/settings";
 
 export const FLUENT_STORAGE_KEY = "fluent.storage.v1";
 
@@ -8,10 +15,14 @@ export const defaultFluentStorageData: FluentStorageData = {
   completedToday: 3,
   streak: 12,
   currentWordIndex: 0,
+  settings: defaultSettingsPreferences,
   wordProgress: {},
 };
 
 const validStatuses = new Set(["new", "learning", "completed", "difficult"]);
+const validDailyGoals = new Set([5, 10, 15, 20]);
+const validLearningLanguages = new Set(["english", "spanish"]);
+const validInterfaceLanguages = new Set(["english", "portuguese", "spanish"]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -52,6 +63,40 @@ function parseWordProgress(value: unknown) {
   return progress;
 }
 
+function parseSettingsPreferences(value: unknown, dailyGoal: number): SettingsPreferences {
+  if (!isRecord(value)) {
+    return {
+      ...defaultSettingsPreferences,
+      dailyGoal: validDailyGoals.has(dailyGoal) ? (dailyGoal as DailyGoal) : 10,
+    };
+  }
+
+  const settingsDailyGoal = value.dailyGoal;
+  const parsedDailyGoal = typeof settingsDailyGoal === "number" && validDailyGoals.has(settingsDailyGoal)
+    ? (settingsDailyGoal as DailyGoal)
+    : validDailyGoals.has(dailyGoal)
+      ? (dailyGoal as DailyGoal)
+      : 10;
+
+  return {
+    dailyGoal: parsedDailyGoal,
+    includeDifficultWords:
+      typeof value.includeDifficultWords === "boolean"
+        ? value.includeDifficultWords
+        : defaultSettingsPreferences.includeDifficultWords,
+    learningLanguage:
+      typeof value.learningLanguage === "string" &&
+      validLearningLanguages.has(value.learningLanguage)
+        ? (value.learningLanguage as LearningLanguage)
+        : defaultSettingsPreferences.learningLanguage,
+    interfaceLanguage:
+      typeof value.interfaceLanguage === "string" &&
+      validInterfaceLanguages.has(value.interfaceLanguage)
+        ? (value.interfaceLanguage as InterfaceLanguage)
+        : defaultSettingsPreferences.interfaceLanguage,
+  };
+}
+
 export function parseStorageData(payload: string | null): FluentStorageData | null {
   if (!payload) {
     return null;
@@ -75,13 +120,17 @@ export function parseStorageData(payload: string | null): FluentStorageData | nu
       return null;
     }
 
+    const parsedDailyGoal = parsed.dailyGoal;
+    const settings = parseSettingsPreferences(parsed.settings, parsedDailyGoal);
+
     return {
       version: 1,
-      dailyGoal: parsed.dailyGoal,
+      dailyGoal: settings.dailyGoal,
       completedToday: parsed.completedToday,
       streak: parsed.streak,
       currentWordIndex:
         typeof parsed.currentWordIndex === "number" ? parsed.currentWordIndex : 0,
+      settings,
       wordProgress,
     };
   } catch {
@@ -90,7 +139,7 @@ export function parseStorageData(payload: string | null): FluentStorageData | nu
 }
 
 export function readFluentStorage(): FluentStorageData | null {
-  if (typeof window === "undefined") {
+  if (typeof window === "undefined" || !window.localStorage) {
     return null;
   }
 
@@ -98,7 +147,7 @@ export function readFluentStorage(): FluentStorageData | null {
 }
 
 export function writeFluentStorage(data: FluentStorageData) {
-  if (typeof window === "undefined") {
+  if (typeof window === "undefined" || !window.localStorage) {
     return;
   }
 

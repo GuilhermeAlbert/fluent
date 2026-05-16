@@ -1,4 +1,5 @@
 import type { WordStatus } from "../../types/word";
+import type { SettingsPreferences } from "../../types/settings";
 
 export interface StorageWordProgress {
   wordId: string;
@@ -13,5 +14,6 @@ export interface FluentStorageData {
   completedToday: number;
   streak: number;
   currentWordIndex: number;
+  settings: SettingsPreferences;
   wordProgress: Record<string, StorageWordProgress>;
 }
