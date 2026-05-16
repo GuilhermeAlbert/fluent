@@ -12,7 +12,7 @@ import { cn } from "../../../../lib/styles";
 import { NavItem } from "./nav-item";
 import type { SidebarNavItem, SidebarProps } from "./types";
 
-export function Sidebar({ copy, isOpen, onClose }: SidebarProps) {
+export function Sidebar({ copy, isOpen, onClose, streak }: SidebarProps) {
   const navItems: SidebarNavItem[] = [
     { label: copy.navigation.home, to: "/", icon: Home },
     { label: copy.navigation.dailyWords, to: "/daily-words", icon: CalendarDays },
@@ -81,7 +81,7 @@ export function Sidebar({ copy, isOpen, onClose }: SidebarProps) {
             />
             <div>
               <p className="text-2xl font-semibold leading-none text-[#070B1A]">
-                12
+                {streak}
               </p>
               <p className="mt-1 text-sm leading-none text-fluent-muted">
                 {copy.navigation.dayStreak}

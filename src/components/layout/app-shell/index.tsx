@@ -4,12 +4,24 @@ import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 import type { AppShellProps } from "./types";
 
-export function AppShell({ children, copy, description, headerAside, title }: AppShellProps) {
+export function AppShell({
+  children,
+  copy,
+  description,
+  headerAside,
+  streak = 0,
+  title,
+}: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className={appShellStyles.root}>
-      <Sidebar copy={copy} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <Sidebar
+        copy={copy}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        streak={streak}
+      />
       <div className={appShellStyles.content}>
         <main className={appShellStyles.main}>
           <Header

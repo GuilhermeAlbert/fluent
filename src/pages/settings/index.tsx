@@ -31,6 +31,7 @@ export function SettingsPage() {
     setIncludeDifficultWords,
     setInterfaceLanguage,
     setLearningLanguage,
+    streak,
   } = useSettingsData();
 
   const dailyGoalOptions: Array<{ label: string; value: DailyGoal }> = [
@@ -52,7 +53,12 @@ export function SettingsPage() {
   ];
 
   return (
-    <AppShell copy={copy} description={copy.settings.description} title={copy.settings.title}>
+    <AppShell
+      copy={copy}
+      description={copy.settings.description}
+      streak={streak}
+      title={copy.settings.title}
+    >
       <div className="space-y-5">
         <SettingsSection icon={BookOpen} title={copy.settings.learning}>
           <SettingsRow

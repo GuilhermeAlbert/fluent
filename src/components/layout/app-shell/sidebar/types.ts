@@ -12,4 +12,5 @@ export interface SidebarProps {
   copy: InterfaceCopy;
   isOpen: boolean;
   onClose: () => void;
+  streak: number;
 }

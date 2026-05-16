@@ -7,6 +7,7 @@ describe("getInterfaceCopy", () => {
 
     expect(copy.navigation.settings).toBe("Configurações");
     expect(copy.home.title).toBe("Palavra de Hoje");
+    expect(copy.dailyWords.title).toBe("Palavras do Dia");
     expect(copy.settings.description).toBe("Personalize sua experiência de aprendizado.");
   });
 
@@ -15,6 +16,7 @@ describe("getInterfaceCopy", () => {
 
     expect(copy.navigation.difficultWords).toBe("Palabras Difíciles");
     expect(copy.home.nextWord).toBe("Siguiente Palabra");
+    expect(copy.dailyWords.filter).toBe("Filtrar");
     expect(copy.settings.learningLanguage).toBe("Idioma de Aprendizaje");
   });
 });

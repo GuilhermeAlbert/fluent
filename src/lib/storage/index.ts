@@ -12,8 +12,8 @@ export const FLUENT_STORAGE_KEY = "fluent.storage.v1";
 export const defaultFluentStorageData: FluentStorageData = {
   version: 1,
   dailyGoal: 10,
-  completedToday: 3,
-  streak: 12,
+  completedToday: 0,
+  streak: 0,
   currentWordIndex: 0,
   settings: defaultSettingsPreferences,
   wordProgress: {},
@@ -123,11 +123,13 @@ export function parseStorageData(payload: string | null): FluentStorageData | nu
     const parsedDailyGoal = parsed.dailyGoal;
     const settings = parseSettingsPreferences(parsed.settings, parsedDailyGoal);
 
+    const hasStoredWordProgress = Object.keys(wordProgress).length > 0;
+
     return {
       version: 1,
       dailyGoal: settings.dailyGoal,
-      completedToday: parsed.completedToday,
-      streak: parsed.streak,
+      completedToday: hasStoredWordProgress ? parsed.completedToday : 0,
+      streak: hasStoredWordProgress ? parsed.streak : 0,
       currentWordIndex:
         typeof parsed.currentWordIndex === "number" ? parsed.currentWordIndex : 0,
       settings,

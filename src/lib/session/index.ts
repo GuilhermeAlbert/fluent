@@ -43,6 +43,7 @@ export function completeCurrentWord(
   storedAt: string,
 ): HomeSessionSnapshot {
   const alreadyCompletedToday = state.wordProgress[wordId]?.completedToday === true;
+  const isNewCompletionToday = !alreadyCompletedToday;
 
   return {
     ...state,
@@ -50,6 +51,7 @@ export function completeCurrentWord(
       ? state.completedToday
       : Math.min(state.completedToday + 1, state.dailyGoal),
     currentWordIndex: getNextWordIndex(state.currentWordIndex, state.dailyGoal),
+    streak: isNewCompletionToday && state.streak === 0 ? 1 : state.streak,
     wordProgress: {
       ...state.wordProgress,
       [wordId]: createWordProgress(wordId, "completed", storedAt, true),

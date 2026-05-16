@@ -3,8 +3,9 @@ import type { InterfaceCopy } from "../../../lib/i18n";
 
 export interface AppShellProps {
   children: ReactNode;
-  title: string;
+  copy: InterfaceCopy;
   description?: string;
   headerAside?: ReactNode;
-  copy: InterfaceCopy;
+  streak?: number;
+  title: string;
 }

@@ -21,6 +21,7 @@ export interface UseSettingsData {
   copy: InterfaceCopy;
   exportData: () => void;
   preferences: SettingsPreferences;
+  streak: number;
   setDailyGoal: (dailyGoal: DailyGoal) => void;
   setIncludeDifficultWords: (includeDifficultWords: boolean) => void;
   setInterfaceLanguage: (interfaceLanguage: InterfaceLanguage) => void;
@@ -93,6 +94,7 @@ export function useSettingsData(): UseSettingsData {
       copy,
       exportData: () => downloadJson(storage),
       preferences,
+      streak: storage.streak,
       setDailyGoal: (dailyGoal: DailyGoal) =>
         updatePreferences((currentPreferences) => ({
           ...currentPreferences,

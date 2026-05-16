@@ -29,6 +29,22 @@ export interface InterfaceCopy {
     playPronunciation: (word: string) => string;
     progressLabel: (completed: number, planned: number) => string;
   };
+  dailyWords: {
+    title: string;
+    description: string;
+    today: string;
+    filter: string;
+    language: string;
+    all: string;
+    remaining: string;
+    completed: string;
+    current: string;
+    noWords: string;
+    markComplete: (word: string) => string;
+    markIncomplete: (word: string) => string;
+    openWord: (word: string) => string;
+    progressLabel: (completed: number, planned: number) => string;
+  };
   settings: {
     title: string;
     description: string;
@@ -92,6 +108,22 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       playPronunciation: (word) => `Play pronunciation for ${word}`,
       progressLabel: (completed, planned) => `${completed} of ${planned} words completed today`,
     },
+    dailyWords: {
+      title: "Daily Words",
+      description: "Learn a few words every day.",
+      today: "Today",
+      filter: "Filter",
+      language: "Language",
+      all: "All",
+      remaining: "Remaining",
+      completed: "Completed",
+      current: "Current",
+      noWords: "No words match this filter.",
+      markComplete: (word) => `Mark ${word} as completed`,
+      markIncomplete: (word) => `Mark ${word} as not completed`,
+      openWord: (word) => `Set ${word} as current word`,
+      progressLabel: (completed, planned) => `${completed} of ${planned} words`,
+    },
     settings: {
       title: "Settings",
       description: "Customize your learning experience.",
@@ -153,6 +185,22 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       playPronunciation: (word) => `Ouvir pronúncia de ${word}`,
       progressLabel: (completed, planned) => `${completed} de ${planned} palavras concluídas hoje`,
     },
+    dailyWords: {
+      title: "Palavras do Dia",
+      description: "Aprenda algumas palavras todos os dias.",
+      today: "Hoje",
+      filter: "Filtrar",
+      language: "Idioma",
+      all: "Todas",
+      remaining: "Restantes",
+      completed: "Concluídas",
+      current: "Atual",
+      noWords: "Nenhuma palavra corresponde a este filtro.",
+      markComplete: (word) => `Marcar ${word} como concluída`,
+      markIncomplete: (word) => `Marcar ${word} como não concluída`,
+      openWord: (word) => `Definir ${word} como palavra atual`,
+      progressLabel: (completed, planned) => `${completed} de ${planned} palavras`,
+    },
     settings: {
       title: "Configurações",
       description: "Personalize sua experiência de aprendizado.",
@@ -213,6 +261,22 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       today: "hoy",
       playPronunciation: (word) => `Reproducir pronunciación de ${word}`,
       progressLabel: (completed, planned) => `${completed} de ${planned} palabras completadas hoy`,
+    },
+    dailyWords: {
+      title: "Palabras Diarias",
+      description: "Aprende algunas palabras cada día.",
+      today: "Hoy",
+      filter: "Filtrar",
+      language: "Idioma",
+      all: "Todas",
+      remaining: "Restantes",
+      completed: "Completadas",
+      current: "Actual",
+      noWords: "Ninguna palabra coincide con este filtro.",
+      markComplete: (word) => `Marcar ${word} como completada`,
+      markIncomplete: (word) => `Marcar ${word} como no completada`,
+      openWord: (word) => `Definir ${word} como palabra actual`,
+      progressLabel: (completed, planned) => `${completed} de ${planned} palabras`,
     },
     settings: {
       title: "Configuración",

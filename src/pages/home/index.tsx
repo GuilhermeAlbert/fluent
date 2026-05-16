@@ -21,6 +21,7 @@ export function HomePage() {
     <AppShell
       copy={copy}
       headerAside={<TodaySummary copy={copy} progress={dailyProgress} summary={todaySummary} />}
+      streak={dailyProgress.streak}
       title={copy.home.title}
     >
       <div className="space-y-6">

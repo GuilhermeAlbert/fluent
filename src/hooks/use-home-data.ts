@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { countCompletedDailyWords } from "../lib/daily-words";
 import { defaultFluentStorageData, readFluentStorage, writeFluentStorage } from "../lib/storage";
 import { defaultSettingsPreferences } from "../lib/settings";
 import { getInterfaceCopy, type InterfaceCopy } from "../lib/i18n";
@@ -87,14 +88,20 @@ function getInitialPreferences(): SettingsPreferences {
 
 function getInitialSession(): HomeSessionSnapshot {
   const stored = readFluentStorage() ?? defaultFluentStorageData;
-
-  return createHomeSessionSnapshot({
+  const settings = stored.settings ?? defaultSettingsPreferences;
+  const words = getHomeWords(settings.learningLanguage, settings.includeDifficultWords);
+  const snapshot = createHomeSessionSnapshot({
     completedToday: Math.min(stored.completedToday, stored.dailyGoal),
     currentWordIndex: stored.currentWordIndex,
     dailyGoal: stored.dailyGoal,
     streak: stored.streak,
     wordProgress: stored.wordProgress,
   });
+
+  return {
+    ...snapshot,
+    completedToday: countCompletedDailyWords(snapshot, words),
+  };
 }
 
 function getRecentWordsFromSession(

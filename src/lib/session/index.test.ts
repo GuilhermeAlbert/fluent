@@ -52,6 +52,21 @@ describe("home session interactions", () => {
     expect(nextState.completedToday).toBe(4);
   });
 
+  it("starts the daily streak when the first word is completed", () => {
+    const state = createHomeSessionSnapshot({
+      completedToday: 0,
+      currentWordIndex: 0,
+      dailyGoal: 10,
+      streak: 0,
+      wordProgress: {},
+    });
+
+    const nextState = completeCurrentWord(state, "advice", baseStoredAt);
+
+    expect(nextState.completedToday).toBe(1);
+    expect(nextState.streak).toBe(1);
+  });
+
   it("skips the current word without increasing completed progress", () => {
     const state = createHomeSessionSnapshot({
       completedToday: 3,
