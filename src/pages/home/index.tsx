@@ -12,6 +12,7 @@ export function HomePage() {
     copy,
     currentWord,
     dailyProgress,
+    markCurrentWordDifficult,
     skipCurrentWord,
     speakCurrentWord,
     todaySummary,
@@ -36,7 +37,12 @@ export function HomePage() {
           <NotesCard copy={copy} note={currentWord.note} />
         </div>
 
-        <StudyActions copy={copy} onNext={completeCurrentWord} onSkip={skipCurrentWord} />
+        <StudyActions
+          copy={copy}
+          onMarkDifficult={markCurrentWordDifficult}
+          onNext={completeCurrentWord}
+          onSkip={skipCurrentWord}
+        />
       </div>
     </AppShell>
   );

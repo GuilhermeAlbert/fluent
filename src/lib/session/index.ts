@@ -37,6 +37,10 @@ function createWordProgress(
   };
 }
 
+function countCompletedToday(wordProgress: HomeSessionSnapshot["wordProgress"]) {
+  return Object.values(wordProgress).filter((progress) => progress.completedToday).length;
+}
+
 export function completeCurrentWord(
   state: HomeSessionSnapshot,
   wordId: string,
@@ -71,6 +75,26 @@ export function skipCurrentWord(
       ...state.wordProgress,
       [wordId]: createWordProgress(wordId, "learning", storedAt, false),
     },
+  };
+}
+
+export function markCurrentWordDifficult(
+  state: HomeSessionSnapshot,
+  wordId: string,
+  storedAt: string,
+): HomeSessionSnapshot {
+  const wordProgress = {
+    ...state.wordProgress,
+    [wordId]: createWordProgress(wordId, "difficult", storedAt, false),
+  };
+  const completedToday = Math.min(countCompletedToday(wordProgress), state.dailyGoal);
+
+  return {
+    ...state,
+    completedToday,
+    currentWordIndex: getNextWordIndex(state.currentWordIndex, state.dailyGoal),
+    streak: completedToday > 0 ? 1 : 0,
+    wordProgress,
   };
 }
 

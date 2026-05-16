@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   completeCurrentWord,
   createHomeSessionSnapshot,
+  markCurrentWordDifficult,
   resetHomeSession,
   skipCurrentWord,
 } from "./index";
@@ -83,6 +84,27 @@ describe("home session interactions", () => {
     expect(nextState.wordProgress.again).toEqual({
       wordId: "again",
       status: "learning",
+      lastStudiedAt: baseStoredAt,
+      completedToday: false,
+    });
+  });
+
+  it("marks the current word as difficult and advances without completing it", () => {
+    const state = createHomeSessionSnapshot({
+      completedToday: 0,
+      currentWordIndex: 2,
+      dailyGoal: 10,
+      streak: 0,
+      wordProgress: {},
+    });
+
+    const nextState = markCurrentWordDifficult(state, "again", baseStoredAt);
+
+    expect(nextState.currentWordIndex).toBe(3);
+    expect(nextState.completedToday).toBe(0);
+    expect(nextState.wordProgress.again).toEqual({
+      wordId: "again",
+      status: "difficult",
       lastStudiedAt: baseStoredAt,
       completedToday: false,
     });

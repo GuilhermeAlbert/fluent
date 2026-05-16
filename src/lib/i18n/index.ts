@@ -24,6 +24,7 @@ export interface InterfaceCopy {
     examples: string;
     notes: string;
     skip: string;
+    markDifficult: string;
     nextWord: string;
     today: string;
     playPronunciation: (word: string) => string;
@@ -69,6 +70,33 @@ export interface InterfaceCopy {
     viewAllWords: (count: number) => string;
     wordsCount: (count: number) => string;
     wordsStartingWith: (letter: string) => string;
+  };
+  difficultWords: {
+    title: string;
+    description: string;
+    searchPlaceholder: string;
+    language: string;
+    filter: string;
+    all: string;
+    marked: string;
+    hard: string;
+    reviewQueue: string;
+    reviewDescription: (count: number) => string;
+    startReview: string;
+    noWords: string;
+    emptyTitle: string;
+    emptyDescription: string;
+    browseWords: string;
+    markedCount: string;
+    hardCount: string;
+    totalCount: string;
+    reasonMarked: string;
+    reasonHard: string;
+    lastStudied: string;
+    notStudiedYet: string;
+    markDifficult: (word: string) => string;
+    removeDifficult: (word: string) => string;
+    studyWord: (word: string) => string;
   };
   settings: {
     title: string;
@@ -128,6 +156,7 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       examples: "Examples",
       notes: "Notes",
       skip: "Skip",
+      markDifficult: "Mark Difficult",
       nextWord: "Next Word",
       today: "today",
       playPronunciation: (word) => `Play pronunciation for ${word}`,
@@ -173,6 +202,34 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       viewAllWords: (count) => `View all ${count} ${count === 1 ? "word" : "words"}`,
       wordsCount: (count) => `${count} ${count === 1 ? "word" : "words"}`,
       wordsStartingWith: (letter) => `Words starting with ${letter.toUpperCase()}`,
+    },
+    difficultWords: {
+      title: "Difficult Words",
+      description: "Review words that need a slower pass.",
+      searchPlaceholder: "Search difficult words...",
+      language: "Language",
+      filter: "Filter",
+      all: "All",
+      marked: "Marked",
+      hard: "Hard",
+      reviewQueue: "Review queue",
+      reviewDescription: (count) =>
+        count === 1 ? "1 word is ready for review." : `${count} words are ready for review.`,
+      startReview: "Start review",
+      noWords: "No difficult words match this view.",
+      emptyTitle: "No difficult words yet",
+      emptyDescription: "Mark words as difficult while studying, or browse hard words from the library.",
+      browseWords: "Browse words",
+      markedCount: "Marked",
+      hardCount: "Hard words",
+      totalCount: "In review",
+      reasonMarked: "Marked difficult",
+      reasonHard: "Hard word",
+      lastStudied: "Last studied",
+      notStudiedYet: "Not studied yet",
+      markDifficult: (word) => `Mark ${word} as difficult`,
+      removeDifficult: (word) => `Remove ${word} from difficult words`,
+      studyWord: (word) => `Study ${word}`,
     },
     settings: {
       title: "Settings",
@@ -230,6 +287,7 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       examples: "Exemplos",
       notes: "Notas",
       skip: "Pular",
+      markDifficult: "Marcar Difícil",
       nextWord: "Próxima Palavra",
       today: "hoje",
       playPronunciation: (word) => `Ouvir pronúncia de ${word}`,
@@ -275,6 +333,34 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       viewAllWords: (count) => `Ver ${count === 1 ? "a" : "todas as"} ${count} ${count === 1 ? "palavra" : "palavras"}`,
       wordsCount: (count) => `${count} ${count === 1 ? "palavra" : "palavras"}`,
       wordsStartingWith: (letter) => `Palavras começando com ${letter.toUpperCase()}`,
+    },
+    difficultWords: {
+      title: "Palavras Difíceis",
+      description: "Revise palavras que precisam de uma passada mais calma.",
+      searchPlaceholder: "Buscar palavras difíceis...",
+      language: "Idioma",
+      filter: "Filtro",
+      all: "Todas",
+      marked: "Marcadas",
+      hard: "Difíceis",
+      reviewQueue: "Fila de revisão",
+      reviewDescription: (count) =>
+        count === 1 ? "1 palavra está pronta para revisão." : `${count} palavras estão prontas para revisão.`,
+      startReview: "Começar revisão",
+      noWords: "Nenhuma palavra difícil corresponde a esta visão.",
+      emptyTitle: "Nenhuma palavra difícil ainda",
+      emptyDescription: "Marque palavras como difíceis durante o estudo ou navegue pelas palavras avançadas da biblioteca.",
+      browseWords: "Explorar palavras",
+      markedCount: "Marcadas",
+      hardCount: "Palavras difíceis",
+      totalCount: "Em revisão",
+      reasonMarked: "Marcada como difícil",
+      reasonHard: "Palavra difícil",
+      lastStudied: "Último estudo",
+      notStudiedYet: "Ainda não estudada",
+      markDifficult: (word) => `Marcar ${word} como difícil`,
+      removeDifficult: (word) => `Remover ${word} das palavras difíceis`,
+      studyWord: (word) => `Estudar ${word}`,
     },
     settings: {
       title: "Configurações",
@@ -332,6 +418,7 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       examples: "Ejemplos",
       notes: "Notas",
       skip: "Saltar",
+      markDifficult: "Marcar Difícil",
       nextWord: "Siguiente Palabra",
       today: "hoy",
       playPronunciation: (word) => `Reproducir pronunciación de ${word}`,
@@ -377,6 +464,34 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       viewAllWords: (count) => `Ver ${count === 1 ? "la" : "las"} ${count} ${count === 1 ? "palabra" : "palabras"}`,
       wordsCount: (count) => `${count} ${count === 1 ? "palabra" : "palabras"}`,
       wordsStartingWith: (letter) => `Palabras que empiezan con ${letter.toUpperCase()}`,
+    },
+    difficultWords: {
+      title: "Palabras Difíciles",
+      description: "Repasa palabras que necesitan un ritmo más lento.",
+      searchPlaceholder: "Buscar palabras difíciles...",
+      language: "Idioma",
+      filter: "Filtro",
+      all: "Todas",
+      marked: "Marcadas",
+      hard: "Difíciles",
+      reviewQueue: "Cola de repaso",
+      reviewDescription: (count) =>
+        count === 1 ? "1 palabra está lista para repasar." : `${count} palabras están listas para repasar.`,
+      startReview: "Empezar repaso",
+      noWords: "Ninguna palabra difícil coincide con esta vista.",
+      emptyTitle: "Aún no hay palabras difíciles",
+      emptyDescription: "Marca palabras como difíciles mientras estudias, o explora las palabras avanzadas de la biblioteca.",
+      browseWords: "Explorar palabras",
+      markedCount: "Marcadas",
+      hardCount: "Palabras difíciles",
+      totalCount: "En repaso",
+      reasonMarked: "Marcada como difícil",
+      reasonHard: "Palabra difícil",
+      lastStudied: "Último estudio",
+      notStudiedYet: "Aún no estudiada",
+      markDifficult: (word) => `Marcar ${word} como difícil`,
+      removeDifficult: (word) => `Quitar ${word} de palabras difíciles`,
+      studyWord: (word) => `Estudiar ${word}`,
     },
     settings: {
       title: "Configuración",

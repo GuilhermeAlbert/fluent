@@ -6,6 +6,7 @@ import { getInterfaceCopy, type InterfaceCopy } from "../lib/i18n";
 import {
   completeCurrentWord,
   createHomeSessionSnapshot,
+  markCurrentWordDifficult,
   resetHomeSession,
   skipCurrentWord,
   type HomeSessionSnapshot,
@@ -23,6 +24,7 @@ export interface HomeData {
   quickActions: QuickAction[];
   copy: InterfaceCopy;
   completeCurrentWord: () => void;
+  markCurrentWordDifficult: () => void;
   resetSession: () => void;
   skipCurrentWord: () => void;
   speakCurrentWord: () => void;
@@ -197,6 +199,16 @@ export function useHomeData(): HomeData {
     );
   }, [updateSession, words]);
 
+  const markDifficult = useCallback(() => {
+    updateSession((currentSession) =>
+      markCurrentWordDifficult(
+        currentSession,
+        words[currentSession.currentWordIndex % words.length].id,
+        new Date().toISOString(),
+      ),
+    );
+  }, [updateSession, words]);
+
   const resetSession = useCallback(() => {
     updateSession(resetHomeSession);
   }, [updateSession]);
@@ -236,9 +248,10 @@ export function useHomeData(): HomeData {
         : recentWords,
       quickActions,
       completeCurrentWord: completeWord,
+      markCurrentWordDifficult: markDifficult,
       resetSession,
       skipCurrentWord: skipWord,
       speakCurrentWord,
     };
-  }, [completeWord, copy, currentWord, resetSession, session, skipWord, speakCurrentWord, words]);
+  }, [completeWord, copy, currentWord, markDifficult, resetSession, session, skipWord, speakCurrentWord, words]);
 }

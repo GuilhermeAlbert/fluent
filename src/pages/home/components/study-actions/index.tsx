@@ -1,9 +1,9 @@
-import { ArrowRight, RotateCcw } from "lucide-react";
+import { ArrowRight, Flag, RotateCcw } from "lucide-react";
 import type { StudyActionsProps } from "./types";
 
-export function StudyActions({ copy, onNext, onSkip }: StudyActionsProps) {
+export function StudyActions({ copy, onMarkDifficult, onNext, onSkip }: StudyActionsProps) {
   return (
-    <div className="grid gap-3 sm:grid-cols-[1fr_1.08fr]">
+    <div className="grid gap-3 lg:grid-cols-[1fr_1fr_1.08fr]">
       <button
         aria-label={copy.home.skip}
         className="grid h-[77px] grid-cols-[58px_1fr_58px] items-center rounded-2xl border border-fluent-border bg-white px-3 text-center text-base font-semibold text-fluent-muted shadow-sm transition hover:border-[#D1D5DB] hover:text-[#070B1A]"
@@ -14,6 +14,19 @@ export function StudyActions({ copy, onNext, onSkip }: StudyActionsProps) {
           <RotateCcw aria-hidden="true" className="h-5 w-5" />
         </span>
         <span>{copy.home.skip}</span>
+        <span />
+      </button>
+
+      <button
+        aria-label={copy.home.markDifficult}
+        className="grid h-[77px] grid-cols-[58px_1fr_58px] items-center rounded-2xl border border-fluent-border bg-white px-3 text-center text-base font-semibold text-[#92400E] shadow-sm transition hover:border-[#FCD34D] hover:bg-[#FFFBEB]"
+        onClick={onMarkDifficult}
+        type="button"
+      >
+        <span className="flex h-[54px] w-[54px] items-center justify-center rounded-2xl border border-[#FDE68A] bg-[#FFFBEB] text-fluent-warning">
+          <Flag aria-hidden="true" className="h-5 w-5" />
+        </span>
+        <span>{copy.home.markDifficult}</span>
         <span />
       </button>
 
