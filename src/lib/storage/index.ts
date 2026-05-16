@@ -63,6 +63,10 @@ function parseWordProgress(value: unknown) {
   return progress;
 }
 
+function countCompletedToday(wordProgress: FluentStorageData["wordProgress"]) {
+  return Object.values(wordProgress).filter((progress) => progress.completedToday).length;
+}
+
 function parseSettingsPreferences(value: unknown, dailyGoal: number): SettingsPreferences {
   if (!isRecord(value)) {
     return {
@@ -123,13 +127,13 @@ export function parseStorageData(payload: string | null): FluentStorageData | nu
     const parsedDailyGoal = parsed.dailyGoal;
     const settings = parseSettingsPreferences(parsed.settings, parsedDailyGoal);
 
-    const hasStoredWordProgress = Object.keys(wordProgress).length > 0;
+    const completedToday = Math.min(countCompletedToday(wordProgress), settings.dailyGoal);
 
     return {
       version: 1,
       dailyGoal: settings.dailyGoal,
-      completedToday: hasStoredWordProgress ? parsed.completedToday : 0,
-      streak: hasStoredWordProgress ? parsed.streak : 0,
+      completedToday,
+      streak: completedToday > 0 ? 1 : 0,
       currentWordIndex:
         typeof parsed.currentWordIndex === "number" ? parsed.currentWordIndex : 0,
       settings,

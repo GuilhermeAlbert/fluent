@@ -100,7 +100,7 @@ describe("home session interactions", () => {
     expect(skipCurrentWord(state, "focus", baseStoredAt).currentWordIndex).toBe(0);
   });
 
-  it("resets today's session while preserving the streak", () => {
+  it("resets today's session and clears the current day streak", () => {
     const state = createHomeSessionSnapshot({
       completedToday: 6,
       currentWordIndex: 4,
@@ -120,7 +120,7 @@ describe("home session interactions", () => {
       completedToday: 0,
       currentWordIndex: 0,
       dailyGoal: 10,
-      streak: 12,
+      streak: 0,
       wordProgress: {},
     });
   });

@@ -1,5 +1,12 @@
 import type { HomeWordSeed } from "./types";
 import type { LearningLanguage } from "../../types/settings";
+import { createVocabularyWordsFromMarkdownModules } from "../markdown-words";
+
+const markdownWordModules = import.meta.glob("../../../languages/**/*.md", {
+  eager: true,
+  import: "default",
+  query: "?raw",
+}) as Record<string, string>;
 
 export const homeWordSeeds: HomeWordSeed[] = [
   {
@@ -210,6 +217,90 @@ export const homeWordSeeds: HomeWordSeed[] = [
     difficulty: "easy",
     frequencyLabel: "Top 600",
     tags: ["attention", "study"],
+    status: "new",
+  },
+  {
+    id: "advise",
+    word: "Advise",
+    partOfSpeech: "Verb",
+    pronunciation: "/ədˈvaɪz/",
+    meaning: "To give advice or an opinion about what someone should do.",
+    examples: [
+      { id: "advise-example-1", text: "The teacher advised her to read aloud." },
+      { id: "advise-example-2", text: "I advise you to practice daily." },
+      { id: "advise-example-3", text: "They advised caution." },
+    ],
+    note: {
+      summary: "“Advise” is the verb; “advice” is the noun.",
+      avoid: "I advice you",
+      use: "I advise you",
+    },
+    difficulty: "medium",
+    frequencyLabel: "Top 1200",
+    tags: ["communication", "guidance"],
+    status: "new",
+  },
+  {
+    id: "adviser",
+    word: "Adviser",
+    partOfSpeech: "Noun",
+    pronunciation: "/ədˈvaɪzər/",
+    meaning: "A person who gives guidance or recommendations.",
+    examples: [
+      { id: "adviser-example-1", text: "Her adviser helped plan the course." },
+      { id: "adviser-example-2", text: "Talk to an adviser before you decide." },
+      { id: "adviser-example-3", text: "The adviser suggested a simpler path." },
+    ],
+    note: {
+      summary: "“Adviser” and “advisor” are both common spellings.",
+      avoid: "advice person",
+      use: "adviser",
+    },
+    difficulty: "medium",
+    frequencyLabel: "Top 1500",
+    tags: ["people", "guidance"],
+    status: "new",
+  },
+  {
+    id: "advocate",
+    word: "Advocate",
+    partOfSpeech: "Noun",
+    pronunciation: "/ˈædvəkət/",
+    meaning: "A person who publicly supports an idea, person, or cause.",
+    examples: [
+      { id: "advocate-example-1", text: "She is an advocate for clear language." },
+      { id: "advocate-example-2", text: "The group needs a strong advocate." },
+      { id: "advocate-example-3", text: "He became an advocate for students." },
+    ],
+    note: {
+      summary: "As a verb, “advocate” is pronounced differently in many accents.",
+      avoid: "advocate for to learn",
+      use: "advocate for learning",
+    },
+    difficulty: "medium",
+    frequencyLabel: "Top 1300",
+    tags: ["support", "people"],
+    status: "new",
+  },
+  {
+    id: "affair",
+    word: "Affair",
+    partOfSpeech: "Noun",
+    pronunciation: "/əˈfer/",
+    meaning: "An event, situation, or matter that people are involved in.",
+    examples: [
+      { id: "affair-example-1", text: "The meeting was a quiet affair." },
+      { id: "affair-example-2", text: "It became a public affair." },
+      { id: "affair-example-3", text: "The whole affair was confusing." },
+    ],
+    note: {
+      summary: "“Affair” can mean an event, matter, or relationship depending on context.",
+      avoid: "an affair public",
+      use: "a public affair",
+    },
+    difficulty: "easy",
+    frequencyLabel: "Top 1100",
+    tags: ["events", "context"],
     status: "new",
   },
 ];
@@ -436,7 +527,8 @@ export function getHomeWords(
   language: LearningLanguage,
   includeDifficultWords: boolean,
 ): HomeWordSeed[] {
-  const words = homeWordsByLanguage[language] ?? homeWordSeeds;
+  const markdownWords = createVocabularyWordsFromMarkdownModules(markdownWordModules, language);
+  const words = markdownWords.length ? markdownWords : (homeWordsByLanguage[language] ?? homeWordSeeds);
 
   if (includeDifficultWords) {
     return words;

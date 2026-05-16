@@ -106,7 +106,7 @@ export function setDailyWordCompleted(
   return {
     ...state,
     completedToday,
-    streak: completedToday > 0 && state.streak === 0 ? 1 : state.streak,
+    streak: completedToday > 0 ? 1 : 0,
     wordProgress,
   };
 }

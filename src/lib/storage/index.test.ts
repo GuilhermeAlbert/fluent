@@ -28,6 +28,18 @@ describe("parseStorageData", () => {
           lastStudiedAt: "2026-05-15T12:00:00.000Z",
           completedToday: true,
         },
+        by: {
+          wordId: "by",
+          status: "completed",
+          lastStudiedAt: "2026-05-15T12:05:00.000Z",
+          completedToday: true,
+        },
+        again: {
+          wordId: "again",
+          status: "completed",
+          lastStudiedAt: "2026-05-15T12:10:00.000Z",
+          completedToday: true,
+        },
       },
     });
 
@@ -36,7 +48,7 @@ describe("parseStorageData", () => {
       dailyGoal: 10,
       completedToday: 3,
       currentWordIndex: 2,
-      streak: 5,
+      streak: 1,
       settings: {
         dailyGoal: 10,
         includeDifficultWords: true,
@@ -48,6 +60,18 @@ describe("parseStorageData", () => {
           wordId: "advice",
           status: "learning",
           lastStudiedAt: "2026-05-15T12:00:00.000Z",
+          completedToday: true,
+        },
+        by: {
+          wordId: "by",
+          status: "completed",
+          lastStudiedAt: "2026-05-15T12:05:00.000Z",
+          completedToday: true,
+        },
+        again: {
+          wordId: "again",
+          status: "completed",
+          lastStudiedAt: "2026-05-15T12:10:00.000Z",
           completedToday: true,
         },
       },
@@ -80,6 +104,64 @@ describe("parseStorageData", () => {
       completedToday: 0,
       streak: 0,
       wordProgress: {},
+    });
+  });
+
+  it("normalizes stale streak values from local demo data", () => {
+    const payload = JSON.stringify({
+      version: 1,
+      dailyGoal: 10,
+      completedToday: 3,
+      currentWordIndex: 1,
+      streak: 12,
+      settings: {
+        dailyGoal: 10,
+        includeDifficultWords: true,
+        learningLanguage: "english",
+        interfaceLanguage: "english",
+      },
+      wordProgress: {
+        advice: {
+          wordId: "advice",
+          status: "completed",
+          lastStudiedAt: "2026-05-16T12:00:00.000Z",
+          completedToday: true,
+        },
+      },
+    });
+
+    expect(parseStorageData(payload)).toMatchObject({
+      completedToday: 1,
+      streak: 1,
+    });
+  });
+
+  it("clears the streak when stored progress has no completed words today", () => {
+    const payload = JSON.stringify({
+      version: 1,
+      dailyGoal: 10,
+      completedToday: 3,
+      currentWordIndex: 2,
+      streak: 12,
+      settings: {
+        dailyGoal: 10,
+        includeDifficultWords: true,
+        learningLanguage: "english",
+        interfaceLanguage: "english",
+      },
+      wordProgress: {
+        again: {
+          wordId: "again",
+          status: "learning",
+          lastStudiedAt: "2026-05-16T12:00:00.000Z",
+          completedToday: false,
+        },
+      },
+    });
+
+    expect(parseStorageData(payload)).toMatchObject({
+      completedToday: 0,
+      streak: 0,
     });
   });
 });

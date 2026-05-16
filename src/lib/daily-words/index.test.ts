@@ -6,9 +6,51 @@ import {
   selectDailyWordForStudy,
   setDailyWordCompleted,
 } from "./index";
-import { getHomeWords } from "../words";
+import type { VocabularyWord } from "../../types/word";
 
 const storedAt = "2026-05-16T12:00:00.000Z";
+
+const dailyWords: VocabularyWord[] = [
+  {
+    id: "advice",
+    word: "Advice",
+    partOfSpeech: "Word",
+    pronunciation: "",
+    meaning: "A suggestion.",
+    examples: [],
+    note: { summary: "", avoid: "", use: "" },
+    difficulty: "easy",
+    frequencyLabel: "Top 500",
+    tags: [],
+    status: "new",
+  },
+  {
+    id: "by",
+    word: "By",
+    partOfSpeech: "Word",
+    pronunciation: "",
+    meaning: "A preposition.",
+    examples: [],
+    note: { summary: "", avoid: "", use: "" },
+    difficulty: "easy",
+    frequencyLabel: "Top 100",
+    tags: [],
+    status: "new",
+  },
+  {
+    id: "context",
+    word: "Context",
+    partOfSpeech: "Word",
+    pronunciation: "",
+    meaning: "Surrounding information.",
+    examples: [],
+    note: { summary: "", avoid: "", use: "" },
+    difficulty: "medium",
+    frequencyLabel: "Top 1000",
+    tags: [],
+    status: "new",
+  },
+];
 
 function createSession(overrides: Partial<HomeSessionSnapshot> = {}): HomeSessionSnapshot {
   return {
@@ -23,17 +65,16 @@ function createSession(overrides: Partial<HomeSessionSnapshot> = {}): HomeSessio
 
 describe("daily words", () => {
   it("creates the planned words for the selected learning language", () => {
-    const words = getHomeWords("spanish", true);
     const items = createDailyWordItems({
       filter: "all",
       session: createSession({ dailyGoal: 3 }),
-      words,
+      words: dailyWords,
     });
 
     expect(items).toHaveLength(3);
     expect(items[0]).toMatchObject({
       position: 1,
-      word: "Consejo",
+      word: "Advice",
       isCompleted: false,
       isCurrent: true,
     });
@@ -53,22 +94,10 @@ describe("daily words", () => {
     });
   });
 
-  it("filters completed and remaining daily words", () => {
-    const words = getHomeWords("english", true);
-    const session = setDailyWordCompleted(createSession({ dailyGoal: 2 }), "advice", true, storedAt);
-
-    expect(
-      createDailyWordItems({ filter: "completed", session, words }).map((item) => item.word),
-    ).toEqual(["Advice"]);
-    expect(
-      createDailyWordItems({ filter: "remaining", session, words }).map((item) => item.word),
-    ).toEqual(["By"]);
-  });
-
-  it("counts completed progress only for the current daily plan", () => {
-    const spanishWords = getHomeWords("spanish", true);
-    const session = createSession({
+  it("clears today's streak when the last completed daily word is unchecked", () => {
+    const state = createSession({
       completedToday: 1,
+      streak: 1,
       wordProgress: {
         advice: {
           wordId: "advice",
@@ -79,7 +108,37 @@ describe("daily words", () => {
       },
     });
 
-    expect(countCompletedDailyWords(session, spanishWords)).toBe(0);
+    const nextState = setDailyWordCompleted(state, "advice", false, storedAt);
+
+    expect(nextState.completedToday).toBe(0);
+    expect(nextState.streak).toBe(0);
+  });
+
+  it("filters completed and remaining daily words", () => {
+    const session = setDailyWordCompleted(createSession({ dailyGoal: 2 }), "advice", true, storedAt);
+
+    expect(
+      createDailyWordItems({ filter: "completed", session, words: dailyWords }).map((item) => item.word),
+    ).toEqual(["Advice"]);
+    expect(
+      createDailyWordItems({ filter: "remaining", session, words: dailyWords }).map((item) => item.word),
+    ).toEqual(["By"]);
+  });
+
+  it("counts completed progress only for the current daily plan", () => {
+    const session = createSession({
+      completedToday: 1,
+      wordProgress: {
+        outside: {
+          wordId: "outside",
+          status: "completed",
+          lastStudiedAt: storedAt,
+          completedToday: true,
+        },
+      },
+    });
+
+    expect(countCompletedDailyWords(session, dailyWords)).toBe(0);
   });
 
   it("selects a daily word for the study screen", () => {

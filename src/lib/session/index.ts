@@ -43,15 +43,15 @@ export function completeCurrentWord(
   storedAt: string,
 ): HomeSessionSnapshot {
   const alreadyCompletedToday = state.wordProgress[wordId]?.completedToday === true;
-  const isNewCompletionToday = !alreadyCompletedToday;
+  const completedToday = alreadyCompletedToday
+    ? state.completedToday
+    : Math.min(state.completedToday + 1, state.dailyGoal);
 
   return {
     ...state,
-    completedToday: alreadyCompletedToday
-      ? state.completedToday
-      : Math.min(state.completedToday + 1, state.dailyGoal),
+    completedToday,
     currentWordIndex: getNextWordIndex(state.currentWordIndex, state.dailyGoal),
-    streak: isNewCompletionToday && state.streak === 0 ? 1 : state.streak,
+    streak: completedToday > 0 ? 1 : 0,
     wordProgress: {
       ...state.wordProgress,
       [wordId]: createWordProgress(wordId, "completed", storedAt, true),
@@ -79,7 +79,7 @@ export function resetHomeSession(state: HomeSessionSnapshot): HomeSessionSnapsho
     completedToday: 0,
     currentWordIndex: 0,
     dailyGoal: state.dailyGoal,
-    streak: state.streak,
+    streak: 0,
     wordProgress: {},
   };
 }

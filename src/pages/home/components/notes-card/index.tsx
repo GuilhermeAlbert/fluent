@@ -10,16 +10,26 @@ export function NotesCard({ copy, note }: NotesCardProps) {
       </h2>
       <p className="mt-8 text-[17px] leading-6 text-[#111827]">{note.summary}</p>
 
-      <div className="mt-7 space-y-6">
-        <p className="flex items-center gap-3 text-[17px] text-[#111827]">
-          <X aria-hidden="true" className="h-6 w-6 text-red-500" strokeWidth={2.4} />
-          {note.avoid}
-        </p>
-        <p className="flex items-center gap-3 text-[17px] text-[#111827]">
-          <CheckCircle2 aria-hidden="true" className="h-6 w-6 text-[#39B54A]" strokeWidth={2.2} />
-          {note.use}
-        </p>
-      </div>
+      {note.avoid || note.use ? (
+        <div className="mt-7 space-y-6">
+          {note.avoid ? (
+            <p className="flex items-center gap-3 text-[17px] text-[#111827]">
+              <X aria-hidden="true" className="h-6 w-6 text-red-500" strokeWidth={2.4} />
+              {note.avoid}
+            </p>
+          ) : null}
+          {note.use ? (
+            <p className="flex items-center gap-3 text-[17px] text-[#111827]">
+              <CheckCircle2
+                aria-hidden="true"
+                className="h-6 w-6 text-[#39B54A]"
+                strokeWidth={2.2}
+              />
+              {note.use}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </Card>
   );
 }

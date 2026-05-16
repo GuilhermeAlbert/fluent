@@ -45,6 +45,31 @@ export interface InterfaceCopy {
     openWord: (word: string) => string;
     progressLabel: (completed: number, planned: number) => string;
   };
+  explorer: {
+    title: string;
+    description: string;
+    searchPlaceholder: string;
+    language: string;
+    difficulty: string;
+    allDifficulty: string;
+    browseBy: string;
+    alphabet: string;
+    alphabetHint: string;
+    categories: string;
+    categoriesHint: string;
+    tags: string;
+    tagsHint: string;
+    difficultyHint: string;
+    frequency: string;
+    frequencyHint: string;
+    browseByAlphabet: string;
+    all: string;
+    noWords: string;
+    openWord: (word: string) => string;
+    viewAllWords: (count: number) => string;
+    wordsCount: (count: number) => string;
+    wordsStartingWith: (letter: string) => string;
+  };
   settings: {
     title: string;
     description: string;
@@ -124,6 +149,31 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       openWord: (word) => `Set ${word} as current word`,
       progressLabel: (completed, planned) => `${completed} of ${planned} words`,
     },
+    explorer: {
+      title: "Explorer",
+      description: "Browse and discover new words.",
+      searchPlaceholder: "Search words, tags, or examples...",
+      language: "Language",
+      difficulty: "Difficulty",
+      allDifficulty: "All Difficulty",
+      browseBy: "Browse by",
+      alphabet: "Alphabet",
+      alphabetHint: "A - Z",
+      categories: "Categories",
+      categoriesHint: "Topics",
+      tags: "Tags",
+      tagsHint: "All tags",
+      difficultyHint: "Easy - Hard",
+      frequency: "Frequency",
+      frequencyHint: "Top words",
+      browseByAlphabet: "Browse by Alphabet",
+      all: "All",
+      noWords: "No words found.",
+      openWord: (word) => `Study ${word}`,
+      viewAllWords: (count) => `View all ${count} ${count === 1 ? "word" : "words"}`,
+      wordsCount: (count) => `${count} ${count === 1 ? "word" : "words"}`,
+      wordsStartingWith: (letter) => `Words starting with ${letter.toUpperCase()}`,
+    },
     settings: {
       title: "Settings",
       description: "Customize your learning experience.",
@@ -201,6 +251,31 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       openWord: (word) => `Definir ${word} como palavra atual`,
       progressLabel: (completed, planned) => `${completed} de ${planned} palavras`,
     },
+    explorer: {
+      title: "Explorar",
+      description: "Navegue e descubra novas palavras.",
+      searchPlaceholder: "Buscar palavras, tags ou exemplos...",
+      language: "Idioma",
+      difficulty: "Dificuldade",
+      allDifficulty: "Todas as Dificuldades",
+      browseBy: "Navegar por",
+      alphabet: "Alfabeto",
+      alphabetHint: "A - Z",
+      categories: "Categorias",
+      categoriesHint: "Tópicos",
+      tags: "Tags",
+      tagsHint: "Todas as tags",
+      difficultyHint: "Fácil - Difícil",
+      frequency: "Frequência",
+      frequencyHint: "Palavras principais",
+      browseByAlphabet: "Navegar por Alfabeto",
+      all: "Todas",
+      noWords: "Nenhuma palavra encontrada.",
+      openWord: (word) => `Estudar ${word}`,
+      viewAllWords: (count) => `Ver ${count === 1 ? "a" : "todas as"} ${count} ${count === 1 ? "palavra" : "palavras"}`,
+      wordsCount: (count) => `${count} ${count === 1 ? "palavra" : "palavras"}`,
+      wordsStartingWith: (letter) => `Palavras começando com ${letter.toUpperCase()}`,
+    },
     settings: {
       title: "Configurações",
       description: "Personalize sua experiência de aprendizado.",
@@ -277,6 +352,31 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       markIncomplete: (word) => `Marcar ${word} como no completada`,
       openWord: (word) => `Definir ${word} como palabra actual`,
       progressLabel: (completed, planned) => `${completed} de ${planned} palabras`,
+    },
+    explorer: {
+      title: "Explorar",
+      description: "Navega y descubre nuevas palabras.",
+      searchPlaceholder: "Buscar palabras, tags o ejemplos...",
+      language: "Idioma",
+      difficulty: "Dificultad",
+      allDifficulty: "Toda Dificultad",
+      browseBy: "Navegar por",
+      alphabet: "Alfabeto",
+      alphabetHint: "A - Z",
+      categories: "Categorías",
+      categoriesHint: "Temas",
+      tags: "Tags",
+      tagsHint: "Todas las tags",
+      difficultyHint: "Fácil - Difícil",
+      frequency: "Frecuencia",
+      frequencyHint: "Palabras principales",
+      browseByAlphabet: "Navegar por Alfabeto",
+      all: "Todas",
+      noWords: "No se encontraron palabras.",
+      openWord: (word) => `Estudiar ${word}`,
+      viewAllWords: (count) => `Ver ${count === 1 ? "la" : "las"} ${count} ${count === 1 ? "palabra" : "palabras"}`,
+      wordsCount: (count) => `${count} ${count === 1 ? "palabra" : "palabras"}`,
+      wordsStartingWith: (letter) => `Palabras que empiezan con ${letter.toUpperCase()}`,
     },
     settings: {
       title: "Configuración",
