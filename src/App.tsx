@@ -3,6 +3,7 @@ import { DailyWordsPage } from "./pages/daily-words";
 import { DifficultWordsPage } from "./pages/difficult-words";
 import { ExplorerPage } from "./pages/explorer";
 import { HomePage } from "./pages/home";
+import { ProgressPage } from "./pages/progress";
 import { SettingsPage } from "./pages/settings";
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
         <Route element={<DailyWordsPage />} path="/daily-words" />
         <Route element={<ExplorerPage />} path="/explorer" />
         <Route element={<DifficultWordsPage />} path="/difficult-words" />
+        <Route element={<ProgressPage />} path="/progress" />
         <Route element={<SettingsPage />} path="/settings" />
         <Route element={<Navigate replace to="/" />} path="*" />
       </Routes>

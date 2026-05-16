@@ -98,6 +98,31 @@ export interface InterfaceCopy {
     removeDifficult: (word: string) => string;
     studyWord: (word: string) => string;
   };
+  progress: {
+    title: string;
+    description: string;
+    todayGoal: string;
+    libraryProgress: string;
+    studiedWords: string;
+    completedWords: string;
+    learningWords: string;
+    difficultWords: string;
+    newWords: string;
+    statusBreakdown: string;
+    sevenDayActivity: string;
+    recentActivity: string;
+    noRecentActivity: string;
+    noRecentActivityDescription: string;
+    activeLanguage: string;
+    totalLibrary: string;
+    completionRate: string;
+    dailyGoal: string;
+    remainingToday: string;
+    words: (count: number) => string;
+    studiedOfTotal: (studied: number, total: number) => string;
+    completedToday: (completed: number, planned: number) => string;
+    activityCount: (count: number) => string;
+  };
   settings: {
     title: string;
     description: string;
@@ -231,6 +256,31 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       removeDifficult: (word) => `Remove ${word} from difficult words`,
       studyWord: (word) => `Study ${word}`,
     },
+    progress: {
+      title: "Progress",
+      description: "Track your vocabulary momentum.",
+      todayGoal: "Today’s goal",
+      libraryProgress: "Library progress",
+      studiedWords: "Studied words",
+      completedWords: "Completed words",
+      learningWords: "Learning",
+      difficultWords: "Difficult",
+      newWords: "New words",
+      statusBreakdown: "Status breakdown",
+      sevenDayActivity: "7-day activity",
+      recentActivity: "Recent activity",
+      noRecentActivity: "No activity yet",
+      noRecentActivityDescription: "Study a word to start building your progress history.",
+      activeLanguage: "Active language",
+      totalLibrary: "Total library",
+      completionRate: "Completion rate",
+      dailyGoal: "Daily goal",
+      remainingToday: "Remaining today",
+      words: (count) => `${count} ${count === 1 ? "word" : "words"}`,
+      studiedOfTotal: (studied, total) => `${studied} of ${total} studied`,
+      completedToday: (completed, planned) => `${completed} of ${planned} completed today`,
+      activityCount: (count) => `${count} ${count === 1 ? "word" : "words"}`,
+    },
     settings: {
       title: "Settings",
       description: "Customize your learning experience.",
@@ -362,6 +412,31 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       removeDifficult: (word) => `Remover ${word} das palavras difíceis`,
       studyWord: (word) => `Estudar ${word}`,
     },
+    progress: {
+      title: "Progresso",
+      description: "Acompanhe seu avanço no vocabulário.",
+      todayGoal: "Meta de hoje",
+      libraryProgress: "Progresso da biblioteca",
+      studiedWords: "Palavras estudadas",
+      completedWords: "Palavras concluídas",
+      learningWords: "Aprendendo",
+      difficultWords: "Difíceis",
+      newWords: "Palavras novas",
+      statusBreakdown: "Distribuição por status",
+      sevenDayActivity: "Atividade de 7 dias",
+      recentActivity: "Atividade recente",
+      noRecentActivity: "Nenhuma atividade ainda",
+      noRecentActivityDescription: "Estude uma palavra para começar seu histórico de progresso.",
+      activeLanguage: "Idioma ativo",
+      totalLibrary: "Biblioteca total",
+      completionRate: "Taxa de conclusão",
+      dailyGoal: "Meta diária",
+      remainingToday: "Restantes hoje",
+      words: (count) => `${count} ${count === 1 ? "palavra" : "palavras"}`,
+      studiedOfTotal: (studied, total) => `${studied} de ${total} estudadas`,
+      completedToday: (completed, planned) => `${completed} de ${planned} concluídas hoje`,
+      activityCount: (count) => `${count} ${count === 1 ? "palavra" : "palavras"}`,
+    },
     settings: {
       title: "Configurações",
       description: "Personalize sua experiência de aprendizado.",
@@ -492,6 +567,31 @@ const copies: Record<InterfaceLanguage, InterfaceCopy> = {
       markDifficult: (word) => `Marcar ${word} como difícil`,
       removeDifficult: (word) => `Quitar ${word} de palabras difíciles`,
       studyWord: (word) => `Estudiar ${word}`,
+    },
+    progress: {
+      title: "Progreso",
+      description: "Sigue tu avance de vocabulario.",
+      todayGoal: "Meta de hoy",
+      libraryProgress: "Progreso de la biblioteca",
+      studiedWords: "Palabras estudiadas",
+      completedWords: "Palabras completadas",
+      learningWords: "Aprendiendo",
+      difficultWords: "Difíciles",
+      newWords: "Palabras nuevas",
+      statusBreakdown: "Distribución por estado",
+      sevenDayActivity: "Actividad de 7 días",
+      recentActivity: "Actividad reciente",
+      noRecentActivity: "Aún no hay actividad",
+      noRecentActivityDescription: "Estudia una palabra para empezar tu historial de progreso.",
+      activeLanguage: "Idioma activo",
+      totalLibrary: "Biblioteca total",
+      completionRate: "Tasa de finalización",
+      dailyGoal: "Meta diaria",
+      remainingToday: "Restantes hoy",
+      words: (count) => `${count} ${count === 1 ? "palabra" : "palabras"}`,
+      studiedOfTotal: (studied, total) => `${studied} de ${total} estudiadas`,
+      completedToday: (completed, planned) => `${completed} de ${planned} completadas hoy`,
+      activityCount: (count) => `${count} ${count === 1 ? "palabra" : "palabras"}`,
     },
     settings: {
       title: "Configuración",
