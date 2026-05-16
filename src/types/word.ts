@@ -7,6 +7,12 @@ export interface WordExample {
   text: string;
 }
 
+export interface WordUsageNote {
+  summary: string;
+  avoid: string;
+  use: string;
+}
+
 export interface VocabularyWord {
   id: string;
   word: string;
@@ -14,6 +20,7 @@ export interface VocabularyWord {
   pronunciation: string;
   meaning: string;
   examples: WordExample[];
+  note: WordUsageNote;
   difficulty: WordDifficulty;
   frequencyLabel: string;
   tags: string[];

@@ -9,15 +9,24 @@ export const currentWordSeed: HomeWordSeed = {
   examples: [
     {
       id: "advice-example-1",
-      text: "She gave me careful advice before the interview.",
+      text: "She gave me good advice.",
     },
     {
       id: "advice-example-2",
-      text: "I need your advice before I send the email.",
+      text: "I need your advice.",
+    },
+    {
+      id: "advice-example-3",
+      text: "Let me give you some advice.",
     },
   ],
+  note: {
+    summary: "“Advice” is uncountable in English.",
+    avoid: "an advice",
+    use: "some advice",
+  },
   difficulty: "easy",
   frequencyLabel: "Top 500",
-  tags: ["communication", "daily life"],
-  status: "learning",
+  tags: ["communication", "daily-life"],
+  status: "new",
 };

@@ -9,15 +9,15 @@ export function NavItem({ item }: NavItemProps) {
     <NavLink
       className={({ isActive }) =>
         cn(
-          "flex h-11 min-w-fit items-center gap-3 rounded-xl px-3 text-sm font-medium transition md:w-full",
+          "flex h-[58px] min-w-fit items-center gap-5 rounded-2xl px-5 text-[17px] font-medium transition md:w-full",
           isActive
-            ? "bg-[#EEF2FF] text-fluent-accent"
-            : "text-fluent-muted hover:bg-white hover:text-fluent-text",
+            ? "bg-[#EFECFF] text-fluent-accent"
+            : "text-[#111827] hover:bg-white hover:text-fluent-accent",
         )
       }
       to={item.to}
     >
-      <Icon aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={2} />
+      <Icon aria-hidden="true" className="h-6 w-6 shrink-0" strokeWidth={2} />
       <span>{item.label}</span>
     </NavLink>
   );

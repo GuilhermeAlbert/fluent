@@ -1,16 +1,14 @@
 import { headerStyles } from "./styles";
 import type { HeaderProps } from "./types";
 
-export function Header({ description, title }: HeaderProps) {
+export function Header({ children, description, title }: HeaderProps) {
   return (
     <header className={headerStyles.root}>
       <div>
         <h1 className={headerStyles.title}>{title}</h1>
-        <p className={headerStyles.description}>{description}</p>
+        {description ? <p className={headerStyles.description}>{description}</p> : null}
       </div>
-      <div aria-hidden="true" className={headerStyles.avatar}>
-        F
-      </div>
+      {children}
     </header>
   );
 }

@@ -1,39 +1,40 @@
-import { CalendarDays, CheckCircle2, Target } from "lucide-react";
-import { Card } from "../../../../components/card";
+import { Flame } from "lucide-react";
 import type { TodaySummaryProps } from "./types";
 
-export function TodaySummary({ summary }: TodaySummaryProps) {
+export function TodaySummary({ progress, summary }: TodaySummaryProps) {
+  const percentage =
+    summary.dailyGoal > 0
+      ? Math.min(Math.max((summary.completedToday / summary.dailyGoal) * 100, 0), 100)
+      : 0;
+
   return (
-    <Card className="mb-6" elevated padding="lg">
-      <div className="grid gap-6 md:grid-cols-[1.2fr_1fr_1fr] md:items-center">
+    <div className="hidden items-center gap-10 sm:flex">
+      <div className="flex items-center gap-3">
+        <Flame aria-hidden="true" className="h-8 w-8 text-fluent-accent" fill="#4F46E5" strokeWidth={1.6} />
         <div>
-          <p className="text-sm font-medium text-fluent-accent">{summary.focusLabel}</p>
-          <p className="mt-2 flex items-center gap-2 text-sm text-fluent-muted">
-            <CalendarDays aria-hidden="true" className="h-4 w-4" />
-            {summary.dateLabel}
-          </p>
-        </div>
-
-        <div className="border-t border-fluent-border pt-5 md:border-l md:border-t-0 md:pl-6 md:pt-0">
-          <p className="flex items-center gap-2 text-sm text-fluent-muted">
-            <Target aria-hidden="true" className="h-4 w-4 text-fluent-warning" />
-            Daily goal
-          </p>
-          <p className="mt-2 text-2xl font-semibold text-fluent-text">
-            {summary.wordsPlannedToday} words planned
-          </p>
-        </div>
-
-        <div className="border-t border-fluent-border pt-5 md:border-l md:border-t-0 md:pl-6 md:pt-0">
-          <p className="flex items-center gap-2 text-sm text-fluent-muted">
-            <CheckCircle2 aria-hidden="true" className="h-4 w-4 text-fluent-success" />
-            Completed today
-          </p>
-          <p className="mt-2 text-2xl font-semibold text-fluent-text">
-            {summary.completedToday} completed
-          </p>
+          <p className="text-2xl font-semibold leading-none text-[#070B1A]">{progress.streak}</p>
+          <p className="mt-1 text-sm text-fluent-muted">day streak</p>
         </div>
       </div>
-    </Card>
+
+      <div className="flex items-center gap-3">
+        <div
+          aria-label={`${summary.completedToday} of ${summary.dailyGoal} words completed today`}
+          className="relative h-12 w-12 rounded-full"
+          role="img"
+          style={{
+            background: `conic-gradient(#4F46E5 ${percentage}%, #E5E7EB 0)`,
+          }}
+        >
+          <div className="absolute inset-[7px] rounded-full bg-fluent-background" />
+        </div>
+        <div>
+          <p className="text-lg font-medium leading-none text-[#374151]">
+            {summary.completedToday} / {summary.dailyGoal}
+          </p>
+          <p className="mt-1 text-sm text-fluent-muted">today</p>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -3,10 +3,10 @@ import { readFluentStorage } from "../lib/storage";
 import type { LocalProgress } from "../types/progress";
 
 const fallbackProgress: LocalProgress = {
-  dailyGoal: 5,
-  wordsPlannedToday: 5,
-  completedToday: 2,
-  streak: 4,
+  dailyGoal: 10,
+  wordsPlannedToday: 10,
+  completedToday: 3,
+  streak: 12,
 };
 
 export function useLocalProgress(): LocalProgress {
